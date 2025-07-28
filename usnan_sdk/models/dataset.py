@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Optional, Dict, Any, List
 
+import usnan_sdk
+
 
 @dataclass
 class Dimension:
@@ -69,12 +71,13 @@ class Dataset:
     """Represents a dataset in the system"""
 
     id: int
+    _initialized: bool = False
+    _client: 'usnan_sdk.USNANClient' = None
     dataset_name: Optional[str] = None
     identifier: Optional[str] = None
     tags: Optional[List[str]] = None
     title: Optional[str] = None
     version: Optional[str] = None
-    file_path: Optional[str] = None
     public_time: Optional[str] = None
     published_ts: Optional[str] = None
     state: Optional[str] = None
@@ -104,6 +107,8 @@ class Dataset:
     classification: Optional[str] = None
     notes: Optional[str] = None
     preferred: Optional[bool] = None
+    spectrometer: 'usnan_sdk.models.Spectrometer' = None
+    facility: 'usnan_sdk.models.Facility' = None
 
     # Computed/derived fields (prefixed with _)
     _is_public: Optional[bool] = None
@@ -115,7 +120,6 @@ class Dataset:
     _pi_name: Optional[str] = None
     _nan_person_name: Optional[str] = None
     _field_strength_mhz: Optional[float] = None
-    _spectrometer_name: Optional[str] = None
     _facility_short_name: Optional[str] = None
     _direct_detection_nucleus: Optional[str] = None
     _nuclei: Optional[str] = None
@@ -129,17 +133,19 @@ class Dataset:
     _versions: Optional[List[DatasetVersion]] = None
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Dataset':
+    def from_dict(cls, client: 'usnan_sdk.USNANClient', data: Dict[str, Any]) -> 'Dataset':
         """Create a Dataset instance from API response data"""
+
         return cls(
             # Core fields
             id=data['id'],
+            _client=client,
+            _initialized=True,
             dataset_name=data.get('dataset_name'),
             identifier=data.get('identifier'),
             tags=data.get('tags'),
             title=data.get('title'),
             version=data.get('version'),
-            file_path=data.get('file_path'),
             public_time=data.get('public_time'),
             published_ts=data.get('published_ts'),
             state=data.get('state'),
@@ -173,6 +179,8 @@ class Dataset:
             classification=data.get('classification'),
             notes=data.get('notes'),
             preferred=data.get('preferred'),
+            spectrometer=usnan_sdk.models.Spectrometer.from_identifier(client, data.get('_spectrometer_identifier'), data.get('spectrometer_name')),
+            facility=usnan_sdk.models.Facility.from_identifier(client, data.get('_facility_identifier')),
 
             # Computed fields
             _is_public=data.get('_is_public'),
@@ -184,7 +192,6 @@ class Dataset:
             _pi_name=data.get('_pi_name'),
             _nan_person_name=data.get('_nan_person_name'),
             _field_strength_mhz=data.get('_field_strength_mhz'),
-            _spectrometer_name=data.get('_spectrometer_name'),
             _facility_short_name=data.get('_facility_short_name'),
             _direct_detection_nucleus=data.get('_direct_detection_nucleus'),
             _nuclei=data.get('_nuclei'),
@@ -198,7 +205,28 @@ class Dataset:
             _versions=[DatasetVersion.from_dict(v) for v in data.get('_versions', [])]
         )
 
+    @classmethod
+    def from_identifier(cls, client: 'usnan_sdk.USNANClient', identifier: int) -> 'Dataset':
+        return cls(id=identifier, _initialized=False, _client=client)
+
+
+    def __getattribute__(self, name):
+        # Always allow access to private attributes and methods to avoid infinite recursion
+        if name.startswith('_'):
+            return super().__getattribute__(name)
+
+        # Auto-initialize if not already initialized
+        if not super().__getattribute__('_initialized'):
+            # Load the full data from the API
+            full_spectrometer = super().__getattribute__('_client').datasets.get(super().__getattribute__('id'))
+            # Copy all the loaded data to this instance
+            for key, value in full_spectrometer.__dict__.items():
+                if not key.startswith('_'):
+                    setattr(self, key, value)
+            super().__setattr__('_initialized', True)
+
+        return super().__getattribute__(name)
+
     def __repr__(self) -> str:
         """Return a concise representation of the dataset"""
-        name = self.experiment_name or self.dataset_name or f"Dataset {self.id}"
-        return f"Dataset('{name}')"
+        return f"Dataset('{self.id}')"
