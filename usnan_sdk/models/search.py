@@ -79,3 +79,15 @@ class SearchConfig:
                 'sort_order': self.sort_order,
                 'sort_field': self.sort_field,
                 'records': self.records}
+
+    def clone(self) -> 'SearchConfig':
+        """
+        Clones this object so that it can be used to keep track of results as they are fetched (or for other purposes).
+
+        Returns:
+             A search config object with the same exact attributes.
+        """
+
+        new_config = SearchConfig(records=self.records, offset=self.offset, sort_order=self.sort_order, sort_field=self.sort_field)
+        new_config.filters = self.filters.copy()
+        return new_config
