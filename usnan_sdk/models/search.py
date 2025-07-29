@@ -60,7 +60,7 @@ class SearchConfig:
         existing_field_filters = self.filters[field]
         for field in existing_field_filters:
             if field.operator != operator:
-                raise ValueError('Cannot have homogeneous operators for the same field.')
+                raise ValueError(f'Cannot have homogeneous operators for the same field. Previous operator: "{field.operator}" Current field operator: "{operator}"')
         existing_field_filters.append(filter_meta)
         return self
 
