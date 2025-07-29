@@ -27,7 +27,7 @@ class DatasetsEndpoint(BaseEndpoint):
             for item in response.get('experiments', []):
                 yield Dataset.from_dict(self.client, item)
             if response.get('last_page'):
-                raise StopIteration
+                return
             config_copy.offset += config_copy.records
 
             # Double the amount of records fetched at a time each time they are exhausted, but don't
