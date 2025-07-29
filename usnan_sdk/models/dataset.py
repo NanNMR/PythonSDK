@@ -130,7 +130,7 @@ class Dataset:
 
     # Related objects
     dimensions: Optional[List[Dimension]] = None
-    _versions: Optional[List[DatasetVersion]] = None
+    versions: Optional[List[DatasetVersion]] = None
 
     @classmethod
     def from_dict(cls, client: 'usnan_sdk.USNANClient', data: Dict[str, Any]) -> 'Dataset':
@@ -201,8 +201,8 @@ class Dataset:
             _copied_to_nmrbox=data.get('_copied_to_nmrbox'),
 
             # Related objects
-            dimensions=[Dimension.from_dict(d) for d in data.get('dimensions', [])],
-            _versions=[DatasetVersion.from_dict(v) for v in data.get('_versions', [])] if data.get("_versions") else []
+            dimensions=[Dimension.from_dict(d) for d in data.get('dimensions', [])] if data.get("dimensions") else [],
+            versions=[DatasetVersion.from_dict(v) for v in data.get('_versions', [])] if data.get("_versions") else []
         )
 
     @classmethod
