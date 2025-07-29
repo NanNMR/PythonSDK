@@ -202,7 +202,7 @@ class Dataset:
 
             # Related objects
             dimensions=[Dimension.from_dict(d) for d in data.get('dimensions', [])],
-            _versions=[DatasetVersion.from_dict(v) for v in data.get('_versions', [])]
+            _versions=[DatasetVersion.from_dict(v) for v in data.get('_versions', [])] if data.get("_versions") else []
         )
 
     @classmethod
