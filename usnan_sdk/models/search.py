@@ -21,7 +21,7 @@ class FilterMetadata:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization"""
-        return {'value': self.value, 'match_mode': self.match_mode, 'operator': self.operator}
+        return {'value': self.value, 'matchMode': self.match_mode, 'operator': self.operator}
 
 
 class SearchConfig:
