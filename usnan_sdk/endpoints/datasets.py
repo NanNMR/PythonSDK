@@ -1,8 +1,6 @@
 """Datasets endpoint implementation"""
-from typing import Generator
-import asyncio
 import concurrent.futures
-from threading import Thread
+from typing import Generator
 
 from .base import BaseEndpoint
 from ..models.dataset import Dataset
