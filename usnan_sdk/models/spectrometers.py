@@ -199,7 +199,7 @@ class FieldDrift:
 class Spectrometer:
     """Represents a spectrometer in the system"""
     identifier: str
-    name: str
+    name: str = None
     _initialized: bool = False
     _client: 'usnan_sdk.USNANClient' = None
     year_commissioned: Optional[int] = None
@@ -307,9 +307,7 @@ class Spectrometer:
 
         # Installed probe
         if self.installed_probe and self.installed_probe.identifier:
-            probe_info = f"Installed Probe: {self.installed_probe.identifier}"
-            if self.installed_probe and self.installed_probe.install_start:
-                probe_info += f" (since {self.installed_probe.install_start})"
+            probe_info = f"Installed Probe: {repr(self.installed_probe)}"
             lines.append(probe_info)
 
         # Compatible probes
@@ -394,5 +392,5 @@ class Spectrometer:
         )
 
     @classmethod
-    def from_identifier(cls, client: 'usnan_sdk.USNANClient', identifier: str, name: str) -> 'Spectrometer':
-        return cls(identifier=identifier, name=name, _initialized=False, _client=client)
+    def from_identifier(cls, client: 'usnan_sdk.USNANClient', identifier: str) -> 'Spectrometer':
+        return cls(identifier=identifier, _initialized=False, _client=client)

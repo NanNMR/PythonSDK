@@ -323,7 +323,7 @@ class InstalledOn:
         if data is None:
             return None
         return cls(
-            spectrometer=usnan_sdk.models.Spectrometer.from_identifier(identifier=data.get('spectrometer_identifier'), name=data.get('name'), client=client),
+            spectrometer=usnan_sdk.models.Spectrometer.from_identifier(identifier=data.get('spectrometer_identifier'), client=client),
             install_start=data.get('install_start')
         )
 
