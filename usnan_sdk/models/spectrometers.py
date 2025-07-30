@@ -51,11 +51,6 @@ class SampleChanger:
 
         return " ".join(parts)
 
-    def __repr__(self) -> str:
-        """Return a concise representation of the sample changer"""
-        name = f"{self.vendor} {self.model}" if self.vendor and self.model else (self.vendor or self.model or "SampleChanger")
-        return f"SampleChanger('{name}')"
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'SampleChanger':
         if data is None:
@@ -79,10 +74,6 @@ class Feature:
         """Return a string representation of the feature"""
         return self.feature
 
-    def __repr__(self) -> str:
-        """Return a concise representation of the feature"""
-        return f"Feature('{self.feature}')"
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Feature':
         return cls(feature=data['feature'])
@@ -99,10 +90,6 @@ class SoftwareVersion:
         if self.features:
             return f"Version {self.version} (Features: {', '.join(self.features)})"
         return f"Version {self.version}"
-
-    def __repr__(self) -> str:
-        """Return a concise representation of the software version"""
-        return f"SoftwareVersion('{self.version}')"
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'SoftwareVersion':
@@ -127,10 +114,6 @@ class Software:
             return f"{self.software} (Versions: {', '.join(version_strs)})"
         return self.software
 
-    def __repr__(self) -> str:
-        """Return a concise representation of the software"""
-        return f"Software('{self.software}')"
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Software':
         if data is None:
@@ -153,10 +136,6 @@ class InstallScheduleRecord:
         """Return a string representation of the scheduled installation"""
         return (f"Probe: {self.probe.name}\n"
                 f"Install start: {self.install_start}")
-
-    def __repr__(self) -> str:
-        """Return a concise representation of the scheduled installation"""
-        return f"InstallScheduleItem('{self.probe.name}: {self.install_start}')"
 
     @classmethod
     def from_dict(cls, client: 'usnan_sdk.USNANclient', data: Dict[str, Any]) -> 'InstallScheduleRecord':
@@ -182,10 +161,6 @@ class FieldDrift:
             parts.append(f"Recorded: {self.recorded}")
 
         return " | ".join(parts) if parts else "Field drift measurement"
-
-    def __repr__(self) -> str:
-        """Return a concise representation of the field drift"""
-        return f"FieldDrift(rate={self.rate})"
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'FieldDrift':
@@ -244,10 +219,7 @@ class Spectrometer:
 
         # Magnet info
         if self.field_strength_mhz:
-            field_info = f"Field Strength: {self.field_strength_mhz} MHz"
-            if self.magnet_vendor:
-                field_info += f" ({self.magnet_vendor})"
-            lines.append(field_info)
+            lines.append(f"Field Strength: {self.field_strength_mhz} MHz")
 
         if self.bore_mm:
             lines.append(f"Bore: {self.bore_mm} mm")
@@ -306,15 +278,15 @@ class Spectrometer:
             lines.append(sc_info)
 
         # Installed probe
-        if self.installed_probe and self.installed_probe.identifier:
-            probe_info = f"Installed Probe: {repr(self.installed_probe)}"
+        if self.installed_probe:
+            probe_info = f"Installed Probe: {self.installed_probe.name}"
             lines.append(probe_info)
 
         # Compatible probes
         if self.compatible_probes:
             lines.append(f"Compatible Probes:")
             for probe in self.compatible_probes:
-                probe_line = f"  {probe.vendor if probe.vendor else 'Unknown Vendor'} {probe.model if probe.model else 'Unknown Model'}"
+                probe_line = f"  {probe.name}"
                 lines.append(probe_line)
 
         # Public access
@@ -327,10 +299,7 @@ class Spectrometer:
 
     def __repr__(self) -> str:
         """Return a concise representation of the spectrometer"""
-        field_info = ""
-        if self.field_strength_mhz:
-            field_info = f" ({self.field_strength_mhz} MHz)"
-        return f"Spectrometer('{self.name}'{field_info})"
+        return f"Spectrometer('{self.identifier})"
 
     def __getattribute__(self, name):
         # Always allow access to private attributes and methods to avoid infinite recursion

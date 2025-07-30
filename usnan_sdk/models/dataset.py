@@ -36,10 +36,6 @@ class Dimension:
 
         return " ".join(parts)
 
-    def __repr__(self) -> str:
-        """Return a concise representation of the dimension"""
-        return f"Dimension({self.dimension}, '{self.nucleus}', direct={self.is_direct})"
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Dimension':
         return cls(

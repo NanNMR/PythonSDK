@@ -16,9 +16,6 @@ class Service:
             return f"{self.service}: {self.description}"
         return self.service
 
-    def __repr__(self) -> str:
-        """Return a concise representation of the service"""
-        return f"Service('{self.service}')"
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Service':
@@ -37,10 +34,6 @@ class Webpage:
     def __str__(self) -> str:
         """Return a string representation of the webpage"""
         return f"{self.urltype}: {self.url}"
-
-    def __repr__(self) -> str:
-        """Return a concise representation of the webpage"""
-        return f"Webpage('{self.urltype}', '{self.url}')"
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Webpage':
@@ -81,10 +74,6 @@ class Staff:
             return f"{name} ({', '.join(details)})"
         return name
 
-    def __repr__(self) -> str:
-        """Return a concise representation of the staff member"""
-        return f"Staff('{self.first_name} {self.last_name}')"
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Staff':
         return cls(
@@ -122,10 +111,6 @@ class Contact:
             contact_info.append(f"Responsibilities: {self.responsibilities}")
 
         return " | ".join(contact_info)
-
-    def __repr__(self) -> str:
-        """Return a concise representation of the contact"""
-        return f"Contact('{self.name}')"
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Contact':
@@ -173,10 +158,6 @@ class Address:
             parts.append(self.country)
 
         return f"{self.address_type}: {', '.join(parts)}"
-
-    def __repr__(self) -> str:
-        """Return a concise representation of the address"""
-        return f"Address('{self.address_type}', '{self.address1}')"
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Address':

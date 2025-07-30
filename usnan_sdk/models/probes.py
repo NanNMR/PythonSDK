@@ -38,10 +38,6 @@ class Channel:
 
         return " ".join(parts)
 
-    def __repr__(self) -> str:
-        """Return a concise representation of the channel"""
-        return f"Channel({self.ch_number})"
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Channel':
         return cls(
@@ -81,8 +77,10 @@ class Probe:
     facility_identifier: Optional[str] = None
     facility_short_name: Optional[str] = None
     facility_long_name: Optional[str] = None
-    installed_on: Optional['InstalledOn'] = None
     channels: Optional[List[Channel]] = None
+
+    installed_on_spectrometer: Optional['usnan_sdk.models.Spectrometer'] = None
+    installed_on_spectrometer_since: Optional[str] = None
 
     def __str__(self) -> str:
         """Return a string representation of the probe"""
@@ -150,8 +148,10 @@ class Probe:
             lines.append(f"Facility: {facility_name}")
 
         # Installation info
-        if self.installed_on:
-            install_info = f"Installed on: {self.installed_on}"
+        if self.installed_on_spectrometer:
+            install_info = f"Installed on: {self.installed_on_spectrometer.name}"
+            if self.installed_on_spectrometer_since:
+                install_info += f" since {self.installed_on_spectrometer_since}"
             lines.append(install_info)
 
         # Channels
@@ -179,7 +179,7 @@ class Probe:
 
     def __repr__(self) -> str:
         """Return a concise representation of the probe using naming logic"""
-        return f"Probe('{self.name}')"
+        return f"Probe('{self.identifier}')"
 
     @cached_property
     def name(self) -> str:
@@ -271,7 +271,8 @@ class Probe:
             facility_identifier=data.get('facility_identifier'),
             facility_short_name=data.get('facility_short_name'),
             facility_long_name=data.get('facility_long_name'),
-            installed_on=InstalledOn.from_dict(client, data.get('installed_on')),
+            installed_on_spectrometer=usnan_sdk.models.Spectrometer.from_identifier(identifier=data.get('installed_on').get('spectrometer_identifier'), client=client) if data.get('installed_on').get('spectrometer_identifier') else None,
+            installed_on_spectrometer_since=data.get('installed_on').get('install_start'),
             channels=[Channel.from_dict(c) for c in data.get('channels', [])] if data.get('channels') else [],
             _initialized=True,
             _client=client
@@ -295,10 +296,6 @@ class Nucleus:
             return f"{self.nucleus} ({len(self.sensitivity_measurements)} measurements)"
         return self.nucleus
 
-    def __repr__(self) -> str:
-        """Return a concise representation of the nucleus"""
-        return f"Nucleus('{self.nucleus}')"
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Nucleus':
         return cls(
@@ -308,23 +305,6 @@ class Nucleus:
                 for sm in data.get('sensitivity_measurements', [])
             ] if data.get('sensitivity_measurements') else []
         )
-
-
-@dataclass
-class InstalledOn:
-    """Represents spectrometer installation information"""
-    spectrometer: 'usnan_sdk.models.Spectrometer' = None
-    install_start: Optional[str] = None
-
-    @classmethod
-    def from_dict(cls, client: 'usnan_sdk.USNANClient', data: Dict[str, Any]) -> 'Union[InstalledOn,None]':
-        if data is None:
-            return None
-        return cls(
-            spectrometer=usnan_sdk.models.Spectrometer.from_identifier(identifier=data.get('spectrometer_identifier'), client=client),
-            install_start=data.get('install_start')
-        )
-
 
 @dataclass
 class SensitivityMeasurement:
@@ -349,10 +329,6 @@ class SensitivityMeasurement:
             parts.append(f"User measurement: {'Yes' if self.is_user else 'No'}")
 
         return " | ".join(parts) if parts else "Sensitivity measurement"
-
-    def __repr__(self) -> str:
-        """Return a concise representation of the sensitivity measurement"""
-        return f"SensitivityMeasurement(sensitivity={self.sensitivity})"
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'SensitivityMeasurement':
