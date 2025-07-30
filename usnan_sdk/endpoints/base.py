@@ -8,9 +8,12 @@ if TYPE_CHECKING:
 
 class BaseEndpoint:
     """Base class for API endpoints"""
-    
+
+    _last_fetch_time: float
+
     def __init__(self, client: 'USNANClient'):
         self.client = client
+        self._last_fetch_time = 0
     
     def _get(self, endpoint: str, params: Optional[Dict[str, Any]] = None) -> Union[Dict[str, Any], List[Any]]:
         """Make a GET request and return JSON response"""

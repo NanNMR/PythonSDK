@@ -1,5 +1,6 @@
 """Probes endpoint implementation"""
 
+import time
 from typing import List, Dict
 from .base import BaseEndpoint
 from usnan_sdk.models.probes import Probe
@@ -23,13 +24,15 @@ class ProbesEndpoint(BaseEndpoint):
         Returns:
             List of Probe objects
         """
-        if self._probes:
+        # Check if cache needs to be invalidated
+        if self._probes and self.client.cache_clear_time <= self._last_fetch_time:
             return self._probes
         else:
             response = self._get('/nan/public/probes')
             probes = [Probe.from_dict(self.client, item) for item in response]
             self._probes_map = {_.identifier: _ for _ in probes}
             self._probes = probes
+            self._last_fetch_time = time.time()
             return probes
     
     def get(self, probe_id: str) -> Probe:
@@ -42,8 +45,7 @@ class ProbesEndpoint(BaseEndpoint):
         Returns:
             Probe object
         """
-        if not self._probes_map:
-            self.list()
+        self.list() # Ensure that the probes are cached
         if probe_id not in self._probes_map:
             raise KeyError(f'Unknown probe identifier: {probe_id}')
         return self._probes_map[probe_id]

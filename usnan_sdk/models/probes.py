@@ -152,8 +152,6 @@ class Probe:
         # Installation info
         if self.installed_on:
             install_info = f"Installed on: {self.installed_on}"
-            if self.installed_on.install_start:
-                install_info += f" (since {self.installed_on.install_start})"
             lines.append(install_info)
 
         # Channels

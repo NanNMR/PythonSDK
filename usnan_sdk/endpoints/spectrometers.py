@@ -1,5 +1,6 @@
 """Spectrometers endpoint implementation"""
 
+import time
 from typing import List, Dict
 from .base import BaseEndpoint
 from usnan_sdk.models.spectrometers import Spectrometer
@@ -23,13 +24,15 @@ class SpectrometerEndpoint(BaseEndpoint):
         Returns:
             List of Spectrometer objects
         """
-        if self._spectrometers:
+        # Check if cache needs to be invalidated
+        if self._spectrometers and self.client.cache_clear_time <= self._last_fetch_time:
             return self._spectrometers
         else:
             response = self._get('/nan/public/instruments')
             facilities = [Spectrometer.from_dict(self.client, item) for item in response]
             self._spectrometers_map = {_.identifier: _ for _ in facilities}
             self._spectrometers = facilities
+            self._last_fetch_time = time.time()
             return facilities
 
     def get(self, spectrometer_id: str) -> Spectrometer:
@@ -42,8 +45,7 @@ class SpectrometerEndpoint(BaseEndpoint):
         Returns:
             Spectrometer object
         """
-        if not self._spectrometers_map:
-            self.list()
+        self.list() # Ensure that the spectrometers are cached
         if spectrometer_id not in self._spectrometers_map:
             raise KeyError(f'Unknown spectrometer identifier: {spectrometer_id}')
         return self._spectrometers_map[spectrometer_id]

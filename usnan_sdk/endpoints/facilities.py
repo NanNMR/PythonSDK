@@ -1,8 +1,8 @@
 """Facilities endpoint implementation"""
+import time
 from typing import List, Dict
 from .base import BaseEndpoint
 from usnan_sdk.models.facilities import Facility
-
 
 class FacilitiesEndpoint(BaseEndpoint):
     """Endpoint for managing facilities"""
@@ -22,13 +22,15 @@ class FacilitiesEndpoint(BaseEndpoint):
         Returns:
             List of Facility objects
         """
-        if self._facilities:
+        # Check if cache needs to be invalidated
+        if self._facilities and self.client.cache_clear_time <= self._last_fetch_time:
             return self._facilities
         else:
             response = self._get('/nan/public/facilities')
             facilities = [Facility.from_dict(self.client, item) for item in response]
             self._facilities_map = {_.identifier: _ for _ in facilities}
             self._facilities = facilities
+            self._last_fetch_time = time.time()
             return facilities
 
     def get(self, facility_id: str) -> Facility:
@@ -41,8 +43,7 @@ class FacilitiesEndpoint(BaseEndpoint):
         Returns:
             Facility object
         """
-        if not self._facilities_map:
-            self.list()
+        self.list() # Ensure that the facilities are cached
         if facility_id not in self._facilities_map:
             raise KeyError(f'Unknown facility ID: {facility_id}')
         return self._facilities_map[facility_id]

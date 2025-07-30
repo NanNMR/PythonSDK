@@ -27,6 +27,7 @@ class USNANClient:
         self.base_url = base_url.rstrip('/')
         self.timeout = timeout
         self.num_retries = num_retries
+        self._cache_clear_time = time.time()
         
         # Initialize session
         self.session = requests.Session()
@@ -85,3 +86,10 @@ class USNANClient:
         
         # If we get here, all retries failed
         raise last_exception
+
+    def clear_cache(self) -> None:
+        self._cache_clear_time = time.time()
+
+    @property
+    def cache_clear_time(self):
+        return self._cache_clear_time
