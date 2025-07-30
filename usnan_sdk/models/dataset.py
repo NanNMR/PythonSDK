@@ -10,7 +10,7 @@ class Dimension:
     dimension: int
     nucleus: str
     is_direct: bool
-    spectral_width: Optional[float] = None
+    spectral_width_ppm: Optional[float] = None
     maximum_evolution_time: Optional[float] = None
     num_points: Optional[int] = None
 
@@ -24,8 +24,8 @@ class Dimension:
             parts.append("(indirect)")
 
         specs = []
-        if self.spectral_width:
-            specs.append(f"SW: {self.spectral_width} Hz")
+        if self.spectral_width_ppm:
+            specs.append(f"SW: {self.spectral_width_ppm} Hz")
         if self.num_points:
             specs.append(f"Points: {self.num_points}")
         if self.maximum_evolution_time:
@@ -46,7 +46,7 @@ class Dimension:
             dimension=data['dimension'],
             nucleus=data['nucleus'],
             is_direct=data['is_direct'],
-            spectral_width=data.get('spectral_width'),
+            spectral_width_ppm=data.get('spectral_width_ppm'),
             maximum_evolution_time=data.get('maximum_evolution_time'),
             num_points=data.get('num_points')
         )
