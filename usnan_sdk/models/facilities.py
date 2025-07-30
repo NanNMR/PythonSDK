@@ -1,7 +1,15 @@
+import re
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any, List
 
 import usnan_sdk
+
+
+def _format_roles_responsibilities(roles: List[str]) -> str:
+    """Convert CamelCase string to space-separated words"""
+
+    # Insert space before uppercase letters that follow lowercase letters or digits
+    return ", ".join([re.sub(r'([a-z0-9])([A-Z])', r'\1 \2', role) for role in roles])
 
 
 @dataclass
@@ -52,8 +60,8 @@ class Staff:
     work_phone: Optional[str] = None
     mobile_phone: Optional[str] = None
     email: Optional[str] = None
-    roles: Optional[str] = None
-    responsibilities: Optional[str] = None
+    roles: Optional[List[str]] = None
+    responsibilities: Optional[List[str]] = None
     expertise: Optional[str] = None
 
     def __str__(self) -> str:
@@ -66,12 +74,14 @@ class Staff:
         if self.email:
             details.append(f"Email: {self.email}")
         if self.roles:
-            details.append(f"Roles: {self.roles}")
+            details.append(f"Roles: {_format_roles_responsibilities(self.roles)}")
+        if self.responsibilities:
+            details.append(f"Responsibilities: {_format_roles_responsibilities(self.responsibilities)}")
         if self.work_phone:
             details.append(f"Phone: {self.work_phone}")
 
         if details:
-            return f"{name} ({', '.join(details)})"
+            return f"{name} ({' | '.join(details)})"
         return name
 
     @classmethod
@@ -97,20 +107,20 @@ class Contact:
     mobile_phone: Optional[str] = None
     email: Optional[str] = None
     details: Optional[str] = None
-    responsibilities: Optional[str] = None
+    responsibilities: Optional[List[str]] = None
 
     def __str__(self) -> str:
         """Return a string representation of the contact"""
-        contact_info = [self.name]
+        contact_info = []
 
         if self.email:
             contact_info.append(f"Email: {self.email}")
         if self.work_phone:
             contact_info.append(f"Phone: {self.work_phone}")
         if self.responsibilities:
-            contact_info.append(f"Responsibilities: {self.responsibilities}")
+            contact_info.append(f"Responsibilities: {_format_roles_responsibilities(self.responsibilities)}")
 
-        return " | ".join(contact_info)
+        return f"{self.name} ({' | '.join(contact_info)})"
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Contact':
@@ -127,7 +137,7 @@ class Contact:
 @dataclass
 class Address:
     """Represents an address for a facility"""
-    address_type: str
+    address_type: List[str]
     address1: str
     address2: Optional[str] = None
     address3: Optional[str] = None
@@ -140,7 +150,6 @@ class Address:
     def __str__(self) -> str:
         """Return a string representation of the address"""
         parts = [self.address1]
-
         if self.address2:
             parts.append(self.address2)
         if self.address3:
@@ -157,7 +166,7 @@ class Address:
         if self.country:
             parts.append(self.country)
 
-        return f"{self.address_type}: {', '.join(parts)}"
+        return f"{', '.join(self.address_type)}: {', '.join(parts)}"
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Address':
@@ -215,53 +224,31 @@ class Facility:
         if self.services:
             lines.append(f"Services:")
             for service in self.services:
-                service_line = f"  - {service.service}"
-                if service.description:
-                    service_line += f": {service.description}"
-                lines.append(service_line)
+                lines.append(f"  {service}")
 
         # Addresses
         if self.addresses:
             lines.append(f"Addresses:")
             for addr in self.addresses:
-                addr_parts = [addr.address1]
-                if addr.address2:
-                    addr_parts.append(addr.address2)
-                if addr.city:
-                    addr_parts.append(addr.city)
-                if addr.state:
-                    addr_parts.append(addr.state)
-                if addr.zipcode:
-                    addr_parts.append(addr.zipcode)
-                lines.append(f"  {addr.address_type}: {', '.join(addr_parts)}")
+                lines.append(f"  {addr}")
 
         # Contacts
         if self.contacts:
             lines.append(f"Contacts:")
             for contact in self.contacts:
-                contact_line = f"  - {contact.name}"
-                if contact.email:
-                    contact_line += f" ({contact.email})"
-                if contact.responsibilities:
-                    contact_line += f" - {contact.responsibilities}"
-                lines.append(contact_line)
+                lines.append(f"  {str(contact)}")
 
         # Staff
         if self.staff:
             lines.append(f"Staff:")
             for staff_member in self.staff:
-                staff_line = f"  - {staff_member.first_name} {staff_member.last_name}"
-                if staff_member.email:
-                    staff_line += f" ({staff_member.email})"
-                if staff_member.roles:
-                    staff_line += f" - {staff_member.roles}"
-                lines.append(staff_line)
+                lines.append(f"  {str(staff_member)}")
 
         # Webpages
         if self.webpages:
             lines.append(f"Webpages:")
             for webpage in self.webpages:
-                lines.append(f"  {webpage.urltype}: {webpage.url}")
+                lines.append(f"  {webpage}")
 
         return '\n'.join(lines)
 

@@ -87,7 +87,8 @@ class Probe:
         lines = []
 
         # Basic info
-        lines.append(f"Probe: {self.identifier}")
+        lines.append(f"Probe: {self.name}")
+        lines.append(f"Identifier: {self.identifier}")
         if self.vendor and self.model:
             lines.append(f"Model: {self.vendor} {self.model}")
         elif self.vendor:
