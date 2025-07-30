@@ -1,22 +1,32 @@
 """Main client for USNAN API"""
 
+import logging
+import time
+
 import requests
+from requests.exceptions import ConnectionError, Timeout, RequestException
+
 from .endpoints import DatasetsEndpoint, FacilitiesEndpoint, SpectrometerEndpoint, ProbesEndpoint
+
+# Set up logger for this module
+logger = logging.getLogger(__name__)
 
 
 class USNANClient:
     """Main client for interacting with the USNAN API"""
-    
-    def __init__(self, base_url: str="https://dev.api.nmrhub.org", timeout: int = 30):
+
+    def __init__(self, base_url: str="https://dev.api.nmrhub.org", timeout: int = 30, num_retries: int = 3):
         """
         Initialize the USNAN client
         
         Args:
             base_url: Base URL for the USNAN API
             timeout: Request timeout in seconds
+            num_retries: Number of retries for failed requests (only for 500 errors or connectivity issues)
         """
         self.base_url = base_url.rstrip('/')
         self.timeout = timeout
+        self.num_retries = num_retries
         
         # Initialize session
         self.session = requests.Session()
@@ -45,6 +55,33 @@ class USNANClient:
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
         kwargs.setdefault('timeout', self.timeout)
         
-        response = self.session.request(method, url, **kwargs)
-        response.raise_for_status()
-        return response
+        last_exception = None
+        
+        for attempt in range(self.num_retries + 1):
+            try:
+                response = self.session.request(method, url, **kwargs)
+                response.raise_for_status()
+                return response
+            except (ConnectionError, Timeout) as e:
+                # Network connectivity issues - retry
+                last_exception = e
+                if attempt < self.num_retries:
+                    logger.info(f"Request to {url} failed due to connectivity issue, retrying in {2 ** attempt} seconds (attempt {attempt + 1}/{self.num_retries + 1})")
+                    time.sleep(2 ** attempt)  # Exponential backoff
+                    continue
+                raise
+            except requests.HTTPError as e:
+                # Only retry on 500 status codes
+                if e.response.status_code == 500:
+                    last_exception = e
+                    if attempt < self.num_retries:
+                        logger.info(f"Request to {url} failed with HTTP 500, retrying in {2 ** attempt} seconds (attempt {attempt + 1}/{self.num_retries + 1})")
+                        time.sleep(2 ** attempt)  # Exponential backoff
+                        continue
+                raise
+            except RequestException:
+                # Other request exceptions - don't retry
+                raise
+        
+        # If we get here, all retries failed
+        raise last_exception
