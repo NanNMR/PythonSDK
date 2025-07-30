@@ -23,7 +23,7 @@ class DatasetsEndpoint(BaseEndpoint):
         config_copy: SearchConfig = search_config.clone()
 
         while True:
-            response = self._get('/nan/data-browser/experiment', params=config_copy.build())
+            response = self._get('/nan/public/datasets/search', params=config_copy.build())
             for item in response.get('experiments', []):
                 yield Dataset.from_dict(self.client, item)
             if response.get('last_page'):
@@ -48,13 +48,5 @@ class DatasetsEndpoint(BaseEndpoint):
         Returns:
             Dataset object
         """
-        search_object = SearchConfig().add_filter('id', value=dataset_id, match_mode='equals')
-        response = self._get(f'/nan/data-browser/experiment', params=search_object.build())
-
-        experiments = response.get('experiments', [])
-        if len(experiments) == 0:
-            raise KeyError('Invalid dataset ID (or the specified dataset is not public.')
-        if len(experiments) > 1:
-            raise KeyError('Error when fetching dataset: more than one dataset found where one was expected.')
-
-        return Dataset.from_dict(self.client, experiments[0])
+        experiment = self._get(f'/nan/public/datasets/{dataset_id}')
+        return Dataset.from_dict(self.client, experiment)

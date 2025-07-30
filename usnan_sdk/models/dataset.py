@@ -73,136 +73,100 @@ class Dataset:
     id: int
     _initialized: bool = False
     _client: 'usnan_sdk.USNANClient' = None
+    classification: Optional[str] = None
     dataset_name: Optional[str] = None
-    identifier: Optional[str] = None
-    tags: Optional[List[str]] = None
-    title: Optional[str] = None
-    version: Optional[str] = None
-    public_time: Optional[str] = None
-    published_ts: Optional[str] = None
-    state: Optional[str] = None
-    person_id: Optional[int] = None
-    pulse_sequence: Optional[str] = None
-    experiment_start_time: Optional[str] = None
-    sample_id: Optional[str] = None
-    solvent: Optional[str] = None
-    temperature_k: Optional[float] = None
-    is_non_uniform: Optional[bool] = None
-    is_locked: Optional[bool] = None
-    sample_sparsity: Optional[str] = None
-    num_dimension: Optional[int] = None
-    num_dimension_collected: Optional[int] = None
+    decoupling_sequence: Optional[str] = None
     experiment_end_time: Optional[str] = None
-    workstation_user: Optional[str] = None
     experiment_name: Optional[str] = None
-    session_id: Optional[int] = None
-    pi_id: Optional[int] = None
+    experiment_start_time: Optional[str] = None
+    facility_identifier: Optional[str] = None
+    identifier: Optional[str] = None
+    is_knowledgebase: Optional[bool] = None
+    is_locked: Optional[bool] = None
+    is_multi_receiver: Optional[bool] = None
+    is_non_uniform: Optional[bool] = None
     mas_rate: Optional[float] = None
-    z0_drift_correction: Optional[bool] = None
     mixing_sequence: Optional[str] = None
     mixing_time: Optional[float] = None
-    decoupling_sequence: Optional[str] = None
-    is_multi_receiver: Optional[bool] = None
-    time_shared: Optional[bool] = None
-    classification: Optional[str] = None
     notes: Optional[str] = None
+    num_dimension: Optional[int] = None
+    num_dimension_collected: Optional[int] = None
+    number_in_set: Optional[int] = None
+    pi_name: Optional[str] = None
     preferred: Optional[bool] = None
-    spectrometer: 'usnan_sdk.models.Spectrometer' = None
-    facility: 'usnan_sdk.models.Facility' = None
-
-    # Computed/derived fields (prefixed with _)
-    _is_public: Optional[bool] = None
-    _num_in_set: Optional[int] = None
-    _source: Optional[str] = None
-    _perm_reason: Optional[str] = None
-    _perm_write: Optional[bool] = None
-    _perm_make_public: Optional[bool] = None
-    _pi_name: Optional[str] = None
-    _nan_person_name: Optional[str] = None
-    _field_strength_mhz: Optional[float] = None
-    _facility_short_name: Optional[str] = None
-    _direct_detection_nucleus: Optional[str] = None
-    _nuclei: Optional[str] = None
-    _session_start: Optional[str] = None
-    _session_finish: Optional[str] = None
-    _sample_name: Optional[str] = None
-    _copied_to_nmrbox: Optional[bool] = None
+    public_time: Optional[str] = None
+    published_time: Optional[str] = None
+    pulse_sequence: Optional[str] = None
+    sample_id: Optional[int] = None
+    sample_sparsity: Optional[float] = None
+    session_id: Optional[int] = None
+    solvent: Optional[str] = None
+    source: Optional[str] = None
+    spectrometer_identifier: Optional[str] = None
+    state: Optional[str] = None
+    tags: Optional[List[str]] = None
+    temperature_k: Optional[float] = None
+    time_shared: Optional[bool] = None
+    title: Optional[str] = None
+    version: Optional[str] = None
+    z0_drift_correction: Optional[bool] = None
 
     # Related objects
+    spectrometer: 'usnan_sdk.models.Spectrometer' = None
+    facility: 'usnan_sdk.models.Facility' = None
     dimensions: Optional[List[Dimension]] = None
     versions: Optional[List[DatasetVersion]] = None
 
     @classmethod
     def from_dict(cls, client: 'usnan_sdk.USNANClient', data: Dict[str, Any]) -> 'Dataset':
         """Create a Dataset instance from API response data"""
-
         return cls(
-            # Core fields
             id=data['id'],
             _client=client,
             _initialized=True,
+            classification=data.get('classification'),
             dataset_name=data.get('dataset_name'),
-            identifier=data.get('identifier'),
-            tags=data.get('tags'),
-            title=data.get('title'),
-            version=data.get('version'),
-            public_time=data.get('public_time'),
-            published_ts=data.get('published_ts'),
-            state=data.get('state'),
-
-            # Dataset details
-            person_id=data.get('person_id'),
-            pulse_sequence=data.get('pulse_sequence'),
-            experiment_start_time=data.get('experiment_start_time'),
-            sample_id=data.get('sample_id'),
-            solvent=data.get('solvent'),
-            temperature_k=data.get('temperature_k'),
-            is_non_uniform=data.get('is_non_uniform'),
-            is_locked=data.get('is_locked'),
-            sample_sparsity=data.get('sample_sparsity'),
-            num_dimension=data.get('num_dimension'),
-            num_dimension_collected=data.get('num_dimension_collected'),
+            decoupling_sequence=data.get('decoupling_sequence'),
             experiment_end_time=data.get('experiment_end_time'),
-            workstation_user=data.get('workstation_user'),
             experiment_name=data.get('experiment_name'),
-            session_id=data.get('session_id'),
-            pi_id=data.get('pi_id'),
-
-            # Additional fields
+            experiment_start_time=data.get('experiment_start_time'),
+            facility_identifier=data.get('facility_identifier'),
+            identifier=data.get('identifier'),
+            is_knowledgebase=data.get('is_knowledgebase'),
+            is_locked=data.get('is_locked'),
+            is_multi_receiver=data.get('is_multi_receiver'),
+            is_non_uniform=data.get('is_non_uniform'),
             mas_rate=data.get('mas_rate'),
-            z0_drift_correction=data.get('z0_drift_correction'),
             mixing_sequence=data.get('mixing_sequence'),
             mixing_time=data.get('mixing_time'),
-            decoupling_sequence=data.get('decoupling_sequence'),
-            is_multi_receiver=data.get('is_multi_receiver'),
-            time_shared=data.get('time_shared'),
-            classification=data.get('classification'),
             notes=data.get('notes'),
+            num_dimension=data.get('num_dimension'),
+            num_dimension_collected=data.get('num_dimension_collected'),
+            number_in_set=data.get('number_in_set'),
+            pi_name=data.get('pi_name'),
             preferred=data.get('preferred'),
-            spectrometer=usnan_sdk.models.Spectrometer.from_identifier(client, data.get('_spectrometer_identifier'), data.get('spectrometer_name')),
-            facility=usnan_sdk.models.Facility.from_identifier(client, data.get('_facility_identifier')),
-
-            # Computed fields
-            _is_public=data.get('_is_public'),
-            _num_in_set=data.get('_num_in_set'),
-            _source=data.get('_source'),
-            _perm_reason=data.get('_perm_reason'),
-            _perm_write=data.get('_perm_write'),
-            _perm_make_public=data.get('_perm_make_public'),
-            _pi_name=data.get('_pi_name'),
-            _nan_person_name=data.get('_nan_person_name'),
-            _field_strength_mhz=data.get('_field_strength_mhz'),
-            _facility_short_name=data.get('_facility_short_name'),
-            _direct_detection_nucleus=data.get('_direct_detection_nucleus'),
-            _nuclei=data.get('_nuclei'),
-            _session_start=data.get('_session_start'),
-            _session_finish=data.get('_session_finish'),
-            _sample_name=data.get('_sample_name'),
-            _copied_to_nmrbox=data.get('_copied_to_nmrbox'),
-
-            # Related objects
-            dimensions=[Dimension.from_dict(d) for d in data.get('dimensions', [])] if data.get("dimensions") else [],
-            versions=[DatasetVersion.from_dict(v) for v in data.get('_versions', [])] if data.get("_versions") else []
+            public_time=data.get('public_time'),
+            published_time=data.get('published_time'),
+            pulse_sequence=data.get('pulse_sequence'),
+            sample_id=data.get('sample_id'),
+            sample_sparsity=data.get('sample_sparsity'),
+            session_id=data.get('session_id'),
+            solvent=data.get('solvent'),
+            source=data.get('source'),
+            spectrometer_identifier=data.get('spectrometer_identifier'),
+            state=data.get('state'),
+            tags=data.get('tags'),
+            temperature_k=data.get('temperature_k'),
+            time_shared=data.get('time_shared'),
+            title=data.get('title'),
+            version=data.get('version'),
+            z0_drift_correction=data.get('z0_drift_correction'),
+            # Complex objects
+            dimensions=[Dimension.from_dict(d) for d in data.get('dimensions', [])] if data.get("dimensions") else None,
+            versions=[DatasetVersion.from_dict(v) for v in data.get('versions', [])] if data.get("versions") else None,
+            # References to other objects
+            spectrometer=usnan_sdk.models.Spectrometer.from_identifier(client, data.get('spectrometer_identifier')),
+            facility=usnan_sdk.models.Facility.from_identifier(client, data.get('facility_identifier')),
         )
 
     @classmethod
