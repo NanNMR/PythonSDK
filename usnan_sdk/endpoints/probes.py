@@ -2,8 +2,9 @@
 
 import time
 from typing import List, Dict
+
 from .base import BaseEndpoint
-from usnan_sdk.models.probes import Probe
+from ..models.probes import Probe
 
 
 class ProbesEndpoint(BaseEndpoint):

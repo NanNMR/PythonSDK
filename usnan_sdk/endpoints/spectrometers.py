@@ -2,8 +2,9 @@
 
 import time
 from typing import List, Dict
+
 from .base import BaseEndpoint
-from usnan_sdk.models.spectrometers import Spectrometer
+from ..models.spectrometers import Spectrometer
 
 
 class SpectrometerEndpoint(BaseEndpoint):

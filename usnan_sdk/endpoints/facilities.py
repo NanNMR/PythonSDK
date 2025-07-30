@@ -1,8 +1,10 @@
 """Facilities endpoint implementation"""
 import time
 from typing import List, Dict
+
 from .base import BaseEndpoint
-from usnan_sdk.models.facilities import Facility
+from ..models.facilities import Facility
+
 
 class FacilitiesEndpoint(BaseEndpoint):
     """Endpoint for managing facilities"""
