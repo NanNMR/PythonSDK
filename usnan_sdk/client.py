@@ -79,6 +79,8 @@ class USNANClient:
                         logger.info(f"Request to {url} failed with HTTP 500, retrying in {2 ** attempt} seconds (attempt {attempt + 1}/{self.num_retries + 1})")
                         time.sleep(2 ** attempt)  # Exponential backoff
                         continue
+                if e.response.status_code == 400:
+                    raise RuntimeError(f"NMRhub server indicated your request was invalid: {e.response.json()['message']}")
                 raise
             except RequestException:
                 # Other request exceptions - don't retry
