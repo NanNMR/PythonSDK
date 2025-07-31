@@ -66,7 +66,7 @@ class DatasetsEndpoint(BaseEndpoint):
         finally:
             executor.shutdown(wait=False)
     
-    def get(self, dataset_id: str) -> Dataset:
+    def get(self, dataset_id: int) -> Dataset:
         """
         Get a specific dataset by ID
 
@@ -76,5 +76,8 @@ class DatasetsEndpoint(BaseEndpoint):
         Returns:
             Dataset object
         """
+        if not isinstance(dataset_id, int):
+            raise TypeError('dataset_id must be an integer.')
+
         experiment = self._get(f'/nan/public/datasets/{dataset_id}')
         return Dataset.from_dict(self.client, experiment)
