@@ -81,6 +81,8 @@ class USNANClient:
                         continue
                 if e.response.status_code == 400:
                     raise RuntimeError(f"NMRhub server indicated your request was invalid: {e.response.json()['message']}")
+                if e.response.status_code == 404:
+                    raise KeyError(f"NMRhub server indicated no results: {e.response.json()['message']}")
                 raise
             except RequestException:
                 # Other request exceptions - don't retry
