@@ -35,5 +35,11 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/usnan/usnan-sdk"
+Homepage = "https://usnan.nmrhub.org"
 Repository = "https://github.com/usnan/usnan-sdk"
+
+[tool.setuptools.packages.find]
+exclude = ["build*", "source*"]
+
+#[tool.setuptools.package-dir]
+#usnan = "usnan_sdk"
