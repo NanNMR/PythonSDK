@@ -1,6 +1,6 @@
 from .probes import Probe, SensitivityMeasurement
 from .facilities import Facility
-from .dataset import Dataset
+from .datasets import Dataset
 from .spectrometers import Spectrometer
 from .search import SearchConfig
 

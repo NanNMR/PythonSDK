@@ -3,7 +3,7 @@ import concurrent.futures
 from typing import Generator
 
 from .base import BaseEndpoint
-from ..models.dataset import Dataset
+from ..models.datasets import Dataset
 from ..models.search import SearchConfig
 
 

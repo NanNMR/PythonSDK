@@ -153,7 +153,7 @@ class TestDatasetModel:
         
         if d.dimensions:
             for dim in d.dimensions:
-                assert isinstance(dim, usnan_sdk.models.dataset.Dimension)
+                assert isinstance(dim, usnan_sdk.models.datasets.Dimension)
                 assert hasattr(dim, 'dimension')
                 assert hasattr(dim, 'nucleus')
                 assert hasattr(dim, 'is_direct')
@@ -165,7 +165,7 @@ class TestDatasetModel:
         
         if d.versions:
             for version in d.versions:
-                assert isinstance(version, usnan_sdk.models.dataset.DatasetVersion)
+                assert isinstance(version, usnan_sdk.models.datasets.DatasetVersion)
                 assert isinstance(version.dataset, usnan_sdk.models.Dataset)
                 assert version.dataset._initialized is False
                 assert hasattr(version, 'id')
