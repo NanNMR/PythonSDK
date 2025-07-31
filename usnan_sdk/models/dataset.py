@@ -174,6 +174,9 @@ class Dataset:
         # Always allow access to private attributes and methods to avoid infinite recursion
         if name.startswith('_'):
             return super().__getattribute__(name)
+        # We don't need to initialize to get the ID
+        if name == 'id':
+            return super().__getattribute__(name)
 
         # Auto-initialize if not already initialized
         if not super().__getattribute__('_initialized'):
