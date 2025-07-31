@@ -51,14 +51,14 @@ class Dimension:
 @dataclass
 class DatasetVersion:
     """Represents a version of an experiment"""
-    id: int
-    version: Optional[str] = None
+    dataset: 'Dataset' = None
+    version: int = None
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'DatasetVersion':
+    def from_dict(cls, client: 'usnan_sdk.USNANClient',data: Dict[str, Any]) -> 'DatasetVersion':
         return cls(
-            id=data['id'],
-            version=data.get('version')
+            dataset=usnan_sdk.models.Dataset.from_identifier(client=client, identifier=data['id']),
+            version=data.get('version'),
         )
 
 
@@ -159,7 +159,7 @@ class Dataset:
             z0_drift_correction=data.get('z0_drift_correction'),
             # Complex objects
             dimensions=[Dimension.from_dict(d) for d in data.get('dimensions', [])] if data.get("dimensions") else None,
-            versions=[DatasetVersion.from_dict(v) for v in data.get('versions', [])] if data.get("versions") else None,
+            versions=[DatasetVersion.from_dict(client, v) for v in data.get('versions', [])] if data.get("versions") else None,
             # References to other objects
             spectrometer=usnan_sdk.models.Spectrometer.from_identifier(client, data.get('spectrometer_identifier')),
             facility=usnan_sdk.models.Facility.from_identifier(client, data.get('facility_identifier')),
