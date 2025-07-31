@@ -57,7 +57,7 @@ class TestDatasetSearch:
         for dataset in results:
             assert isinstance(dataset, usnan_sdk.models.Dataset)
             count += 1
-            if count >= 10:  # Limit for test performance
+            if count + 1 == search_config.records: # Don't fetch a new batch
                 break
 
         assert count > 0
@@ -83,7 +83,7 @@ class TestDatasetSearch:
     def test_search_with_multiple_filters(self):
         """Test search with multiple filters."""
         client = usnan_sdk.USNANClient()
-        search_config = (usnan_sdk.models.SearchConfig()
+        search_config = (usnan_sdk.models.SearchConfig(records=1)
                         .add_filter('is_knowledgebase', value=True, match_mode='equals')
                         .add_filter('num_dimension', value=2, match_mode='equals'))
         
@@ -116,7 +116,7 @@ class TestDatasetSearch:
     def test_search_generator_behavior(self):
         """Test that search returns a proper generator."""
         client = usnan_sdk.USNANClient()
-        search_config = usnan_sdk.models.SearchConfig().add_filter('is_knowledgebase', value=True, match_mode='equals')
+        search_config = usnan_sdk.models.SearchConfig(records=1).add_filter('is_knowledgebase', value=True, match_mode='equals')
         results = client.datasets.search(search_config)
 
         # Should be a generator
