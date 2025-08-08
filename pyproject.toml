@@ -33,6 +33,9 @@ dev = [
     "black",
     "flake8",
 ]
+doc = [
+    "sphinx"
+]
 
 [project.urls]
 Homepage = "https://usnan.nmrhub.org"
