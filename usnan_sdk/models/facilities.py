@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Literal
 
 import usnan_sdk
 
@@ -15,7 +15,7 @@ def _format_roles_responsibilities(roles: List[str]) -> str:
 @dataclass
 class Service:
     """Represents a service offered by a facility"""
-    service: str
+    service: Literal["Analysis", "Data Processing", "Experiment Setup", "Remote Access", "Rotor Packing", "Sample Preparation", "Self Service", "Shipping and Handling", "Consultation", "Training"]
     description: Optional[str] = None
 
     def __str__(self) -> str:
@@ -36,7 +36,7 @@ class Service:
 @dataclass
 class Webpage:
     """Represents a webpage associated with a facility"""
-    urltype: str
+    urltype: Literal["Contact", "Facility Access", "Overview", "Policy", "Rates", "Research", "Service", "Spectrometers"]
     url: str
 
     def __str__(self) -> str:
@@ -60,9 +60,9 @@ class Staff:
     work_phone: Optional[str] = None
     mobile_phone: Optional[str] = None
     email: Optional[str] = None
-    roles: Optional[List[str]] = None
-    responsibilities: Optional[List[str]] = None
-    expertise: Optional[str] = None
+    roles: Optional[List[Literal["Administrator", "Director", "Engineer", "FacilityManager", "Researcher", "Technician", "Approver"]]] = None
+    responsibilities: Optional[List[Literal["Administrator", "Director", "Engineer", "FacilityManager", "Researcher", "Technician", "Approver"]]] = None
+    expertise: Optional[List[Literal["Bruker", "DNA/RNA", "Material", "Metabolomics", "Protein", "Pulse Sequence Programming", "Rotor Packing", "Small Molecule", "Solid State", "Solution", "Varian", "Carbohydrates"]]] = None
 
     def __str__(self) -> str:
         """Return a string representation of the staff member"""
@@ -107,7 +107,7 @@ class Contact:
     mobile_phone: Optional[str] = None
     email: Optional[str] = None
     details: Optional[str] = None
-    responsibilities: Optional[List[str]] = None
+    responsibilities: Optional[List[Literal["Administrative Services", "Equipment Maintenance", "Experiment Support", "Sample Shipping and Handling", "Scheduling"]]] = None
 
     def __str__(self) -> str:
         """Return a string representation of the contact"""
@@ -137,7 +137,7 @@ class Contact:
 @dataclass
 class Address:
     """Represents an address for a facility"""
-    address_type: List[str]
+    address_type: List[Literal["Physical", "Mailing", "Shipping"]]
     address1: str
     address2: Optional[str] = None
     address3: Optional[str] = None
@@ -195,7 +195,7 @@ class Facility:
     institution: Optional[str] = None
     url: Optional[str] = None
     color: Optional[str] = None
-    logo: Optional[str] = None  # Base64 encoded logo
+    logo: Optional[str] = None
     services: Optional[List[Service]] = None
     webpages: Optional[List[Webpage]] = None
     staff: Optional[List[Staff]] = None
