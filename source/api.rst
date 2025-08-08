@@ -3,6 +3,21 @@ API Reference
 
 This section provides detailed documentation for the USNAN SDK API endpoints and their JSON responses.
 
+Overview
+--------
+
+The endpoints provide access to different data objects within NAN. In this initial release, that includes:
+
+ * Datasets (also known as experiments) (:class:`usnan_sdk.models.datasets.Dataset`)
+ * Facilities (:class:`usnan_sdk.models.facilities.Facility`)
+ * Spectrometers (also known as spectrometers) (:class:`usnan_sdk.models.spectrometers.Spectrometer`)
+ * Probes (:class:`usnan_sdk.models.probes.Probe`)
+
+Furthermore, some of these data objects have other data objects embedded inside of them. For example, a facility object
+has staff objects associated with it. These embedded objects are implemented as Python dataclasses in the SDK models
+and their JSON structure is documented in the respective endpoint sections below.
+
+
 Endpoints
 ---------
 
@@ -173,7 +188,7 @@ Facilities Endpoint
          "email": "string",
          "roles": ["string"],
          "responsibilities": ["string"],
-         "expertise": "string"
+         "expertise": ["string"]
        }
      ],
      "contacts": [
@@ -203,57 +218,74 @@ Facilities Endpoint
 
 **Response Fields:**
 
-* ``identifier`` - [Add description]
-* ``long_name`` - [Add description]
-* ``short_name`` - [Add description]
-* ``description`` - [Add description]
-* ``institution`` - [Add description]
-* ``url`` - [Add description]
-* ``color`` - [Add description]
-* ``logo`` - [Add description]
+The core facility information.
 
-**Service Object Fields:**
+* ``identifier`` (string) - The unique identifier for the facility. Choosen by administrators rather than being randomly assigned.
+* ``long_name`` (string) - A long name for the facility, including the center name.
+* ``short_name`` (string) - A shorter name for the facility.
+* ``description`` (string) - A description of the facility.
+* ``institution`` (string) - The name of the institution that the facility is located at.
+* ``url`` (string) - The official URL for the facility.
+* ``color`` (string) - A hex color code used to style the facilities pages.
+* ``logo`` (string) - The facility logo in SVG format.
+* ``services`` (Service[]) - See below
+* ``webpages`` (Webpage[]) - See below
+* ``staff`` (Staff[]) - See below
+* ``contacts`` (Contact[]) - See below
+* ``addresses`` (Address[]) - See below
 
-* ``service`` - [Add description]
-* ``description`` - [Add description]
+**Service Fields:**
 
-**Webpage Object Fields:**
+A service the facility provides.
 
-* ``urltype`` - [Add description]
-* ``url`` - [Add description]
+* ``service`` (string) - A string describing the type of service provided. Valid values are one of the following: ``"Analysis", "Data Processing", "Experiment Setup", "Remote Access", "Rotor Packing", "Sample Preparation", "Self Service", "Shipping and Handling", "Consultation", "Training"``
+* ``description`` (string) - Additional information about the service provided at this facility.
 
-**Staff Object Fields:**
+**Webpage Fields:**
 
-* ``first_name`` - [Add description]
-* ``last_name`` - [Add description]
-* ``middle_initial`` - [Add description]
-* ``work_phone`` - [Add description]
-* ``mobile_phone`` - [Add description]
-* ``email`` - [Add description]
-* ``roles`` - [Add description]
-* ``responsibilities`` - [Add description]
-* ``expertise`` - [Add description]
+A web page assosciated with the facility.
 
-**Contact Object Fields:**
+* ``urltype`` (string) - A string describing the type of URL provided. Valid values are one of the following: ``"Contact", "Facility Access", "Overview", "Policy", "Rates", "Research", "Service", "Spectrometers"``
+* ``url`` (string) - The URL to the web page.
 
-* ``name`` - [Add description]
-* ``work_phone`` - [Add description]
-* ``mobile_phone`` - [Add description]
-* ``email`` - [Add description]
-* ``details`` - [Add description]
-* ``responsibilities`` - [Add description]
+**Staff Fields:**
 
-**Address Object Fields:**
+A staff member at the facility.
 
-* ``address_type`` - [Add description]
-* ``address1`` - [Add description]
-* ``address2`` - [Add description]
-* ``address3`` - [Add description]
-* ``city`` - [Add description]
-* ``state`` - [Add description]
-* ``zipcode`` - [Add description]
-* ``zipcode_ext`` - [Add description]
-* ``country`` - [Add description]
+* ``first_name`` (string) - The staff member's given name(s).
+* ``last_name`` (string) - The staff member's family name(s).
+* ``middle_initial`` (string) - The staff member's middle initial(s).
+* ``work_phone`` (string) - The staff member's work phone number.
+* ``mobile_phone`` (string) - The staff member's mobile phone number.
+* ``email`` (string) - The staff member's e-mail.
+* ``roles`` (string[]) - The staff member's roles. A list of one or more of the following strings: ``"Administrator", "Director", "Engineer", "FacilityManager", "Researcher", "Technician", "Approver"``
+* ``responsibilities`` (string) - The staff member's responsibilties. A list of one or more of the following strings: ``"Administrative Services", "Equipment Maintenance", "Experiment Support", "Sample Shipping and Handling", "Scheduling"``
+* ``expertise`` (string) - The staff member's expertise. A list of one or more of the following strings: ``"Bruker", "DNA/RNA", "Material", "Metabolomics", "Protein", "Pulse Sequence Programming", "Rotor Packing", "Small Molecule", "Solid State", "Solution", "Varian", "Carbohydrates"``
+
+**Contact Fields:**
+
+A contact at the facility, who may or may not also be a staff member.
+
+* ``name`` (string) - The contact's name.
+* ``work_phone`` (string) - The contact's work phone number.
+* ``mobile_phone`` (string) - The contact's mobile phone.
+* ``email`` (string) - The contact's e-mail address.
+* ``details`` (string) - Details about the contact, or under what circumstances they are the appropriate contact.
+* ``responsibilities`` (string[]) - The staff member's responsibilties. A list of one or more of the following strings: ``"Administrative Services", "Equipment Maintenance", "Experiment Support", "Sample Shipping and Handling", "Scheduling"``
+
+**Address Fields:**
+
+An address associated with the facility.
+
+* ``address_type`` (string[]) - The type of the address record. One or more of the following strings: ``"Physical", "Mailing", "Shipping"``
+* ``address1`` (string) - The first line of the facility address.
+* ``address2`` (string) - The second line of the facility address.
+* ``address3`` (string) - The third line of the facility address.
+* ``city`` (string) - The city the address is located at.
+* ``state`` (string) - The state the address is located at.
+* ``zipcode`` (string) - The zip code of the address.
+* ``zipcode_ext`` (string) - The zip code extension of the address.
+* ``country`` (string) - The country of the address.
 
 Spectrometers Endpoint
 ~~~~~~~~~~~~~~~~~~~~~~
