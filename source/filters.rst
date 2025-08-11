@@ -15,12 +15,12 @@ To search for datasets, create a ``SearchConfig`` object and add filters:
 
 .. code-block:: python
 
-    import usnan_sdk
+    import usnan
 
-    client = usnan_sdk.USNANClient()
+    client = usnan.USNANClient()
     
     # Create a search configuration
-    search_config = usnan_sdk.models.SearchConfig()
+    search_config = usnan.models.SearchConfig()
     
     # Add a filter
     search_config.add_filter('is_knowledgebase', value=True, match_mode='equals')
@@ -45,7 +45,7 @@ The ``SearchConfig`` class accepts the following parameters:
 .. code-block:: python
 
     # Configure pagination and sorting
-    search_config = usnan_sdk.models.SearchConfig(
+    search_config = usnan.models.SearchConfig(
         records=50,
         offset=0,
         sort_order='DESC',
@@ -109,7 +109,7 @@ Exact Match
 .. code-block:: python
 
     # Find datasets that are knowledge base entries
-    search_config = usnan_sdk.models.SearchConfig()
+    search_config = usnan.models.SearchConfig()
     search_config.add_filter('is_knowledgebase', value=True, match_mode='equals')
 
 Text Search
@@ -118,7 +118,7 @@ Text Search
 .. code-block:: python
 
     # Find datasets with names containing "protein"
-    search_config = usnan_sdk.models.SearchConfig()
+    search_config = usnan.models.SearchConfig()
     search_config.add_filter('dataset_name', value='protein', match_mode='contains')
 
 Numeric Comparison
@@ -127,7 +127,7 @@ Numeric Comparison
 .. code-block:: python
 
     # Find 2D datasets
-    search_config = usnan_sdk.models.SearchConfig()
+    search_config = usnan.models.SearchConfig()
     search_config.add_filter('num_dimension', value=2, match_mode='equals')
 
 Null Checking
@@ -136,7 +136,7 @@ Null Checking
 .. code-block:: python
 
     # Find datasets with descriptions
-    search_config = usnan_sdk.models.SearchConfig()
+    search_config = usnan.models.SearchConfig()
     search_config.add_filter('description', match_mode='isNotNull')
 
 Multiple Filters
@@ -147,7 +147,7 @@ You can combine multiple filters to create complex search queries:
 .. code-block:: python
 
     # Find 2D knowledge base datasets
-    search_config = (usnan_sdk.models.SearchConfig()
+    search_config = (usnan.models.SearchConfig()
                     .add_filter('is_knowledgebase', value=True, match_mode='equals')
                     .add_filter('num_dimension', value=2, match_mode='equals'))
 
@@ -162,7 +162,7 @@ When adding multiple filters for the same field, you can specify the operator:
 .. code-block:: python
 
     # Find datasets with specific names (OR logic)
-    search_config = usnan_sdk.models.SearchConfig()
+    search_config = usnan.models.SearchConfig()
     search_config.add_filter('dataset_name', value='protein', match_mode='contains', operator='OR')
     search_config.add_filter('dataset_name', value='nucleic', match_mode='contains', operator='OR')
 
@@ -175,7 +175,7 @@ The search results are returned as a generator that automatically handles pagina
 
 .. code-block:: python
 
-    search_config = usnan_sdk.models.SearchConfig(records=25)
+    search_config = usnan.models.SearchConfig(records=25)
     results = client.datasets.search(search_config)
     
     count = 0
@@ -196,7 +196,7 @@ You can clone a search configuration to create variations:
 .. code-block:: python
 
     # Base configuration
-    base_config = usnan_sdk.models.SearchConfig()
+    base_config = usnan.models.SearchConfig()
     base_config.add_filter('is_knowledgebase', value=True, match_mode='equals')
     
     # Clone and modify
@@ -214,7 +214,7 @@ Invalid Filter Names
 .. code-block:: python
 
     try:
-        search_config = usnan_sdk.models.SearchConfig()
+        search_config = usnan.models.SearchConfig()
         search_config.add_filter('invalid_field_name', value=True, match_mode='equals')
         results = client.datasets.search(search_config)
         next(results)  # Error occurs when executing the search
@@ -227,7 +227,7 @@ Mixed Operators
 .. code-block:: python
 
     try:
-        search_config = usnan_sdk.models.SearchConfig()
+        search_config = usnan.models.SearchConfig()
         search_config.add_filter('field', value='value1', operator='OR')
         search_config.add_filter('field', value='value2', operator='AND')  # Error!
     except ValueError as e:
@@ -239,7 +239,7 @@ Invalid Dataset IDs
 .. code-block:: python
 
     try:
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         dataset = client.datasets.get("invalid_id")  # Should be integer
     except TypeError as e:
         print(f"Invalid ID type: {e}")
@@ -256,13 +256,13 @@ Here's a comprehensive example showing various filtering techniques:
 
 .. code-block:: python
 
-    import usnan_sdk
+    import usnan
 
     def search_datasets():
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         
         # Create a complex search
-        search_config = (usnan_sdk.models.SearchConfig(records=50)
+        search_config = (usnan.models.SearchConfig(records=50)
                         .add_filter('is_knowledgebase', value=True, match_mode='equals')
                         .add_filter('num_dimension', value=2, match_mode='equals'))
         

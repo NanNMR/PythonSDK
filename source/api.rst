@@ -8,10 +8,10 @@ Overview
 
 The endpoints provide access to different data objects within NAN. In this initial release, that includes:
 
- * Datasets (also known as experiments) (:class:`usnan_sdk.models.datasets.Dataset`)
- * Facilities (:class:`usnan_sdk.models.facilities.Facility`)
- * Spectrometers (also known as spectrometers) (:class:`usnan_sdk.models.spectrometers.Spectrometer`)
- * Probes (:class:`usnan_sdk.models.probes.Probe`)
+ * Datasets (also known as experiments) (:class:`usnan.models.datasets.Dataset`)
+ * Facilities (:class:`usnan.models.facilities.Facility`)
+ * Spectrometers (also known as spectrometers) (:class:`usnan.models.spectrometers.Spectrometer`)
+ * Probes (:class:`usnan.models.probes.Probe`)
 
 Furthermore, some of these data objects have other data objects embedded inside of them. For example, a facility object
 has staff objects associated with it. These embedded objects are implemented as Python dataclasses in the SDK models

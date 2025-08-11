@@ -34,7 +34,7 @@ Search for a knowledgebase dataset with 3 dimensions:
 
 .. code-block:: python
 
-   search_config = (usnan_sdk.models.SearchConfig()
+   search_config = (usnan.models.SearchConfig()
                         .add_filter('is_knowledgebase', value=True, match_mode='equals')
                         .add_filter('num_dimension', value=3, match_mode='equals'))
    results = client.datasets.search(search_config)

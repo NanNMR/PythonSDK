@@ -3,28 +3,28 @@ Class Descriptions
 
 This section contains the complete documentation for the USNAN SDK.
 
-.. automodule:: usnan_sdk
+.. automodule:: usnan
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: usnan_sdk.models.datasets
+.. automodule:: usnan.models.datasets
    :members:
    :show-inheritance:
 
-.. automodule:: usnan_sdk.models.search
+.. automodule:: usnan.models.search
    :members:
    :show-inheritance:
 
-.. automodule:: usnan_sdk.models.facilities
+.. automodule:: usnan.models.facilities
    :members:
    :show-inheritance:
 
-.. automodule:: usnan_sdk.models.spectrometers
+.. automodule:: usnan.models.spectrometers
    :members:
    :show-inheritance:
 
-.. automodule:: usnan_sdk.models.probes
+.. automodule:: usnan.models.probes
    :members:
    :show-inheritance:
 
