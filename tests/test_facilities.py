@@ -2,20 +2,20 @@
 Test file for USNANClient facility functionality.
 """
 
-import usnan_sdk
+import usnan
 
 
 def test_get_facilities():
     """Test that get_facilities returns expected values. """
 
-    client = usnan_sdk.USNANClient()
+    client = usnan.USNANClient()
     facilities = client.facilities.list()
 
     # Assert we got a list with at least one facility
     assert isinstance(facilities, list)
     assert len(facilities) >= 1
     assert all([_._initialized == True for _ in facilities])
-    assert isinstance(facilities[0], usnan_sdk.models.Facility)
+    assert isinstance(facilities[0], usnan.models.Facility)
 
     # Ensure that we can get a facility by ID
     first_facility = facilities[0]

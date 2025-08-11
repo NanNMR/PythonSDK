@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any, List, Literal
 
-import usnan_sdk
+import usnan
 
 
 def _format_roles_responsibilities(roles: List[str]) -> str:
@@ -189,7 +189,7 @@ class Facility:
     identifier: str
     long_name: str
     _initialized: bool = False
-    _client: 'usnan_sdk.USNANClient' = None
+    _client: 'usnan.USNANClient' = None
     short_name: Optional[str] = None
     description: Optional[str] = None
     institution: Optional[str] = None
@@ -201,7 +201,7 @@ class Facility:
     staff: Optional[List[Staff]] = None
     contacts: Optional[List[Contact]] = None
     addresses: Optional[List[Address]] = None
-    spectrometers: List['usnan_sdk.models.Spectrometer'] = field(default_factory=list)
+    spectrometers: List['usnan.models.Spectrometer'] = field(default_factory=list)
 
     def __str__(self) -> str:
         """Return a string representation of the facility"""
@@ -277,7 +277,7 @@ class Facility:
         return super().__getattribute__(name)
 
     @classmethod
-    def from_dict(cls, client: 'usnan_sdk.USNANClient', data: Dict[str, Any]) -> 'Facility':
+    def from_dict(cls, client: 'usnan.USNANClient', data: Dict[str, Any]) -> 'Facility':
         """Create a Facility instance from API response data"""
         return cls(
             identifier=data['identifier'],
@@ -299,5 +299,5 @@ class Facility:
         )
 
     @classmethod
-    def from_identifier(cls, client: 'usnan_sdk.USNANClient', identifier: str) -> 'Facility':
+    def from_identifier(cls, client: 'usnan.USNANClient', identifier: str) -> 'Facility':
         return cls(identifier=identifier, long_name='', _initialized=False, _client=client)

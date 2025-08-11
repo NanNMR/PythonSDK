@@ -3,7 +3,7 @@ Test file for USNANClient datasets functionality.
 """
 
 import pytest
-import usnan_sdk
+import usnan
 
 
 class TestDatasetRetrieval:
@@ -11,31 +11,31 @@ class TestDatasetRetrieval:
 
     def test_get_single_dataset(self):
         """Ensure we can get a single dataset by ID."""
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         d = client.datasets.get(363067)
-        assert isinstance(d, usnan_sdk.models.Dataset)
-        assert isinstance(d.facility, usnan_sdk.models.Facility)
-        assert isinstance(d.spectrometer, usnan_sdk.models.Spectrometer)
-        assert isinstance(d.spectrometer.installed_probe, usnan_sdk.models.Probe) or d.spectrometer.installed_probe is None
+        assert isinstance(d, usnan.models.Dataset)
+        assert isinstance(d.facility, usnan.models.Facility)
+        assert isinstance(d.spectrometer, usnan.models.Spectrometer)
+        assert isinstance(d.spectrometer.installed_probe, usnan.models.Probe) or d.spectrometer.installed_probe is None
 
     def test_get_dataset_with_string_id(self):
         """Test that string IDs are handled correctly."""
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         with pytest.raises(TypeError):
             client.datasets.get("363067")
 
     def test_get_nonexistent_dataset(self):
         """Test that requesting a non-existent dataset raises appropriate error.
         301 is known not to exist. """
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         with pytest.raises(KeyError):
             client.datasets.get(301)
 
     def test_dataset_lazy_loading(self):
         """Test that datasets can be created with minimal data and load on access."""
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         # Create a dataset with just an ID (not initialized)
-        d = usnan_sdk.models.Dataset.from_identifier(client, 363067)
+        d = usnan.models.Dataset.from_identifier(client, 363067)
         assert d.id == 363067
         assert not d._initialized
         
@@ -49,13 +49,13 @@ class TestDatasetSearch:
 
     def test_basic_search(self):
         """Ensure that getting datasets via search works."""
-        client = usnan_sdk.USNANClient()
-        search_config = usnan_sdk.models.SearchConfig().add_filter('is_knowledgebase', value=True, match_mode='equals')
+        client = usnan.USNANClient()
+        search_config = usnan.models.SearchConfig().add_filter('is_knowledgebase', value=True, match_mode='equals')
         results = client.datasets.search(search_config)
 
         count = 0
         for dataset in results:
-            assert isinstance(dataset, usnan_sdk.models.Dataset)
+            assert isinstance(dataset, usnan.models.Dataset)
             count += 1
             if count + 1 == search_config.records: # Don't fetch a new batch
                 break
@@ -64,8 +64,8 @@ class TestDatasetSearch:
 
     def test_search_pagination(self):
         """Test that search handles pagination correctly."""
-        client = usnan_sdk.USNANClient()
-        search_config = usnan_sdk.models.SearchConfig(records=49).add_filter('is_knowledgebase', value=True, match_mode='equals')
+        client = usnan.USNANClient()
+        search_config = usnan.models.SearchConfig(records=49).add_filter('is_knowledgebase', value=True, match_mode='equals')
         results = client.datasets.search(search_config)
 
         # Test that we can get more than the initial batch size
@@ -82,10 +82,10 @@ class TestDatasetSearch:
 
     def test_search_with_multiple_filters(self):
         """Test search with multiple filters."""
-        client = usnan_sdk.USNANClient()
-        search_config = (usnan_sdk.models.SearchConfig(records=1)
-                        .add_filter('is_knowledgebase', value=True, match_mode='equals')
-                        .add_filter('num_dimension', value=2, match_mode='equals'))
+        client = usnan.USNANClient()
+        search_config = (usnan.models.SearchConfig(records=1)
+                         .add_filter('is_knowledgebase', value=True, match_mode='equals')
+                         .add_filter('num_dimension', value=2, match_mode='equals'))
         
         results = client.datasets.search(search_config)
         
@@ -102,9 +102,9 @@ class TestDatasetSearch:
 
     def test_search_empty_results(self):
         """Test search that returns no results."""
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         # Use a filter that should return no results
-        search_config = usnan_sdk.models.SearchConfig().add_filter('dataset_name', value='nonexistent_dataset_12345', match_mode='equals')
+        search_config = usnan.models.SearchConfig().add_filter('dataset_name', value='nonexistent_dataset_12345', match_mode='equals')
         results = client.datasets.search(search_config)
 
         count = 0
@@ -115,8 +115,8 @@ class TestDatasetSearch:
 
     def test_search_generator_behavior(self):
         """Test that search returns a proper generator."""
-        client = usnan_sdk.USNANClient()
-        search_config = usnan_sdk.models.SearchConfig(records=1).add_filter('is_knowledgebase', value=True, match_mode='equals')
+        client = usnan.USNANClient()
+        search_config = usnan.models.SearchConfig(records=1).add_filter('is_knowledgebase', value=True, match_mode='equals')
         results = client.datasets.search(search_config)
 
         # Should be a generator
@@ -125,7 +125,7 @@ class TestDatasetSearch:
 
         # Should be able to iterate multiple times by creating new searches
         first_result = next(results)
-        assert isinstance(first_result, usnan_sdk.models.Dataset)
+        assert isinstance(first_result, usnan.models.Dataset)
 
 
 class TestDatasetModel:
@@ -133,7 +133,7 @@ class TestDatasetModel:
 
     def test_dataset_attributes(self):
         """Test that dataset has expected attributes."""
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         d = client.datasets.get(363067)
         
         # Test that basic attributes exist
@@ -148,25 +148,25 @@ class TestDatasetModel:
 
     def test_dataset_dimensions(self):
         """Test dataset dimensions functionality."""
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         d = client.datasets.get(363067)
         
         if d.dimensions:
             for dim in d.dimensions:
-                assert isinstance(dim, usnan_sdk.models.datasets.Dimension)
+                assert isinstance(dim, usnan.models.datasets.Dimension)
                 assert hasattr(dim, 'dimension')
                 assert hasattr(dim, 'nucleus')
                 assert hasattr(dim, 'is_direct')
 
     def test_dataset_versions(self):
         """Test dataset versions functionality."""
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         d = client.datasets.get(363067)
         
         if d.versions:
             for version in d.versions:
-                assert isinstance(version, usnan_sdk.models.datasets.DatasetVersion)
-                assert isinstance(version.dataset, usnan_sdk.models.Dataset)
+                assert isinstance(version, usnan.models.datasets.DatasetVersion)
+                assert isinstance(version.dataset, usnan.models.Dataset)
                 assert version.dataset._initialized is False
                 assert hasattr(version, 'id')
 
@@ -176,21 +176,21 @@ class TestErrorHandling:
 
     def test_invalid_search_filter(self):
         """Test that invalid filter names raise RuntimeError."""
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
 
         with pytest.raises(RuntimeError):
-            search_config = usnan_sdk.models.SearchConfig().add_filter('is_knowlsedgebase', value=True, match_mode='equals')
+            search_config = usnan.models.SearchConfig().add_filter('is_knowlsedgebase', value=True, match_mode='equals')
             results = client.datasets.search(search_config)
             next(results)  # Error should occur when we try to execute the search
 
     def test_mismatched_filter_operators(self):
         """Test that mismatched filters cannot be applied."""
         with pytest.raises(ValueError):
-            usnan_sdk.models.SearchConfig().add_filter('test', value=True, operator='OR').add_filter('test', value=True, operator='AND')
+            usnan.models.SearchConfig().add_filter('test', value=True, operator='OR').add_filter('test', value=True, operator='AND')
 
     def test_invalid_dataset_id_type(self):
         """Test handling of invalid dataset ID types."""
-        client = usnan_sdk.USNANClient()
+        client = usnan.USNANClient()
         
         with pytest.raises(TypeError):
             client.datasets.get(None)
@@ -201,7 +201,7 @@ class TestSearchConfiguration:
 
     def test_search_config_cloning(self):
         """Test that search config can be cloned properly."""
-        original = usnan_sdk.models.SearchConfig().add_filter('is_knowledgebase', value=True, match_mode='equals')
+        original = usnan.models.SearchConfig().add_filter('is_knowledgebase', value=True, match_mode='equals')
         cloned = original.clone()
         
         # Should be different objects
@@ -212,7 +212,7 @@ class TestSearchConfiguration:
 
     def test_search_config_offset_and_records(self):
         """Test search config offset and records parameters."""
-        config = usnan_sdk.models.SearchConfig()
+        config = usnan.models.SearchConfig()
         
         # Test default values
         built_config = config.build()

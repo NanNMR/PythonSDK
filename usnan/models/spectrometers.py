@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, Dict, Any, List
 
-import usnan_sdk
+import usnan
 from .probes import Probe
 
 
@@ -138,7 +138,7 @@ class InstallScheduleRecord:
                 f"Install start: {self.install_start}")
 
     @classmethod
-    def from_dict(cls, client: 'usnan_sdk.USNANclient', data: Dict[str, Any]) -> 'InstallScheduleRecord':
+    def from_dict(cls, client: 'usnan.USNANclient', data: Dict[str, Any]) -> 'InstallScheduleRecord':
         return cls(
             probe=Probe.from_identifier(client, data.get('identifier')),
             install_start=data.get('install_start')
@@ -176,7 +176,7 @@ class Spectrometer:
     identifier: str
     name: str = None
     _initialized: bool = False
-    _client: 'usnan_sdk.USNANClient' = None
+    _client: 'usnan.USNANClient' = None
     year_commissioned: Optional[int] = None
     status: Optional[str] = None
     is_public: Optional[bool] = None
@@ -194,7 +194,7 @@ class Spectrometer:
     operating_system: Optional[str] = None
     version: Optional[str] = None
     sample_changer_id: Optional[int] = None
-    facility: 'usnan_sdk.models.Facility' = None
+    facility: 'usnan.models.Facility' = None
     _facility_identifier: Optional[str] = None
     sample_changer: Optional[SampleChanger] = None
     sample_changer_default_temperature_control: Optional[bool] = None
@@ -322,7 +322,7 @@ class Spectrometer:
         return super().__getattribute__(name)
 
     @classmethod
-    def from_dict(cls, client: 'usnan_sdk.USNANClient', data: Dict[str, Any]) -> 'Spectrometer':
+    def from_dict(cls, client: 'usnan.USNANClient', data: Dict[str, Any]) -> 'Spectrometer':
         """Create a Spectrometer instance from API response data"""
         return cls(
             identifier=data['identifier'],
@@ -344,7 +344,7 @@ class Spectrometer:
             operating_system=data.get('operating_system'),
             version=data.get('version'),
             sample_changer_id=data.get('sample_changer_id'),
-            facility=usnan_sdk.models.Facility.from_identifier(client, data.get('facility_identifier')) if data.get('facility_identifier') else None,
+            facility=usnan.models.Facility.from_identifier(client, data.get('facility_identifier')) if data.get('facility_identifier') else None,
             _facility_identifier=data.get('facility_identifier'),
             sample_changer=SampleChanger.from_dict(data.get('sample_changer')),
             sample_changer_default_temperature_control=data.get('sample_changer_default_temperature_control'),
@@ -364,5 +364,5 @@ class Spectrometer:
         )
 
     @classmethod
-    def from_identifier(cls, client: 'usnan_sdk.USNANClient', identifier: str) -> 'Spectrometer':
+    def from_identifier(cls, client: 'usnan.USNANClient', identifier: str) -> 'Spectrometer':
         return cls(identifier=identifier, _initialized=False, _client=client)

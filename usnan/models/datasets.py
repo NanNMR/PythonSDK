@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, Dict, Any, List, Literal
 
-import usnan_sdk
+import usnan
 
 
 @dataclass
@@ -55,9 +55,9 @@ class DatasetVersion:
     version: int = None
 
     @classmethod
-    def from_dict(cls, client: 'usnan_sdk.USNANClient',data: Dict[str, Any]) -> 'DatasetVersion':
+    def from_dict(cls, client: 'usnan.USNANClient', data: Dict[str, Any]) -> 'DatasetVersion':
         return cls(
-            dataset=usnan_sdk.models.Dataset.from_identifier(client=client, identifier=data['id']),
+            dataset=usnan.models.Dataset.from_identifier(client=client, identifier=data['id']),
             version=data.get('version'),
         )
 
@@ -68,7 +68,7 @@ class Dataset:
 
     id: int
     _initialized: bool = False
-    _client: 'usnan_sdk.USNANClient' = None
+    _client: 'usnan.USNANClient' = None
     classification: Optional[Literal["Calibration experiment", "Failed-sample related", "Failed-instrument related", "Failed-setup related", "Successful experiment", "Test experiment"]] = None
     dataset_name: Optional[str] = None
     decoupling_sequence: Optional[str] = None
@@ -108,13 +108,13 @@ class Dataset:
     z0_drift_correction: Optional[bool] = None
 
     # Related objects
-    spectrometer: 'usnan_sdk.models.Spectrometer' = None
-    facility: 'usnan_sdk.models.Facility' = None
+    spectrometer: 'usnan.models.Spectrometer' = None
+    facility: 'usnan.models.Facility' = None
     dimensions: Optional[List[Dimension]] = None
     versions: Optional[List[DatasetVersion]] = None
 
     @classmethod
-    def from_dict(cls, client: 'usnan_sdk.USNANClient', data: Dict[str, Any]) -> 'Dataset':
+    def from_dict(cls, client: 'usnan.USNANClient', data: Dict[str, Any]) -> 'Dataset':
         """Create a Dataset instance from API response data"""
         return cls(
             id=data['id'],
@@ -161,12 +161,12 @@ class Dataset:
             dimensions=[Dimension.from_dict(d) for d in data.get('dimensions', [])] if data.get("dimensions") else None,
             versions=[DatasetVersion.from_dict(client, v) for v in data.get('versions', [])] if data.get("versions") else None,
             # References to other objects
-            spectrometer=usnan_sdk.models.Spectrometer.from_identifier(client, data.get('spectrometer_identifier')),
-            facility=usnan_sdk.models.Facility.from_identifier(client, data.get('facility_identifier')),
+            spectrometer=usnan.models.Spectrometer.from_identifier(client, data.get('spectrometer_identifier')),
+            facility=usnan.models.Facility.from_identifier(client, data.get('facility_identifier')),
         )
 
     @classmethod
-    def from_identifier(cls, client: 'usnan_sdk.USNANClient', identifier: int) -> 'Dataset':
+    def from_identifier(cls, client: 'usnan.USNANClient', identifier: int) -> 'Dataset':
         return cls(id=identifier, _initialized=False, _client=client)
 
 

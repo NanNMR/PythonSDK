@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import Optional, List, Dict, Any, Union
 
-import usnan_sdk
-import usnan_sdk.models
+import usnan
+import usnan.models
 
 @dataclass
 class Channel:
@@ -57,7 +57,7 @@ class Probe:
     """Represents a probe in the system"""
     identifier: str = None
     _initialized: bool = False
-    _client: 'usnan_sdk.USNANClient' = None
+    _client: 'usnan.USNANClient' = None
     status: Optional[str] = None
     status_detail: Optional[str] = None
     kind: Optional[str] = None
@@ -79,7 +79,7 @@ class Probe:
     facility_long_name: Optional[str] = None
     channels: Optional[List[Channel]] = None
 
-    installed_on_spectrometer: Optional['usnan_sdk.models.Spectrometer'] = None
+    installed_on_spectrometer: Optional['usnan.models.Spectrometer'] = None
     installed_on_spectrometer_since: Optional[str] = None
 
     def __str__(self) -> str:
@@ -252,7 +252,7 @@ class Probe:
         return super().__getattribute__(name)
 
     @classmethod
-    def from_dict(cls, client: 'usnan_sdk.USNANClient', data: Dict[str, Any]) -> 'Probe':
+    def from_dict(cls, client: 'usnan.USNANClient', data: Dict[str, Any]) -> 'Probe':
         """Create a Probe instance from API response data"""
         return cls(
             identifier=data['identifier'],
@@ -275,7 +275,7 @@ class Probe:
             facility_identifier=data.get('facility_identifier'),
             facility_short_name=data.get('facility_short_name'),
             facility_long_name=data.get('facility_long_name'),
-            installed_on_spectrometer=usnan_sdk.models.Spectrometer.from_identifier(identifier=data.get('installed_on').get('spectrometer_identifier'), client=client) if data.get('installed_on').get('spectrometer_identifier') else None,
+            installed_on_spectrometer=usnan.models.Spectrometer.from_identifier(identifier=data.get('installed_on').get('spectrometer_identifier'), client=client) if data.get('installed_on').get('spectrometer_identifier') else None,
             installed_on_spectrometer_since=data.get('installed_on').get('install_start'),
             channels=[Channel.from_dict(c) for c in data.get('channels', [])] if data.get('channels') else [],
             _initialized=True,
@@ -283,7 +283,7 @@ class Probe:
         )
 
     @classmethod
-    def from_identifier(cls, client: 'usnan_sdk.USNANClient', identifier: str) -> 'Probe':
+    def from_identifier(cls, client: 'usnan.USNANClient', identifier: str) -> 'Probe':
         probe = cls(identifier=identifier, _initialized=False, _client=client)
         return probe
 
@@ -292,7 +292,7 @@ class Probe:
 class Nucleus:
     """Represents a nucleus with sensitivity measurements"""
     nucleus: str
-    sensitivity_measurements: Optional[List['usnan_sdk.models.SensitivityMeasurement']] = None
+    sensitivity_measurements: Optional[List['usnan.models.SensitivityMeasurement']] = None
 
     def __str__(self) -> str:
         """Return a string representation of the nucleus"""

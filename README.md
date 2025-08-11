@@ -5,13 +5,13 @@ Python SDK for interacting with the USNAN API.
 ## Installation
 
 ```bash
-pip install usnan-sdk
+pip install usnan
 ```
 
 ## Usage
 
 ```python
-from usnan_sdk import USNANClient
+from usnan import USNANClient
 
 # Initialize the client
 client = USNANClient()
