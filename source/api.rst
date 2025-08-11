@@ -21,12 +21,9 @@ and their JSON structure is documented in the respective endpoint sections below
 Endpoints
 ---------
 
-Datasets Endpoint
-~~~~~~~~~~~~~~~~~
+Dataset Fetch Endpoint
+~~~~~~~~~~~~~~~~~~~~~~
 
-**API Endpoints:**
-
-* ``GET /nan/public/datasets/search`` - Search for datasets using various filters
 * ``GET /nan/public/datasets/{dataset_id}`` - Retrieve a specific dataset by ID
 
 **JSON Response Structure:**
@@ -144,6 +141,39 @@ Datasets Endpoint
 
 * ``id`` - [Add description]
 * ``version`` - [Add description]
+
+Dataset Search Endpoint
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* ``GET /nan/public/datasets/search`` - Search for datasets using various filters
+
+Parameters:
+
+* ``filters`` - A dictionary of search filter configurations, JSON encoded. Details below.
+* ``records`` (integer) - The number of records to return at a time. Defaults to 100.
+* ``offset`` (integer) - An integer offset into the results. Defaults to 0.
+* ``sort_field`` (string) - The name of the field to sort by. Must match one of the fields in the Experiment response.
+* ``sort_order`` ('ASC' or 'DESC') - Specifies whether to sort by the sort_field in ascending or descending order.
+
+Some examples of the filters parameter, prior to being stringified:
+
+* ``{id: [{value: 363067, matchMode: 'equals', operator: 'OR'}, {value: 363068, matchMode: 'equals', operator: 'OR'}]}`` - Filters where the dataset ID has the exact value 363067 OR 363068.
+* ``{is_knowledgebase: [{value: true, matchMode: 'equals'}], num_dimension: [{value: 2, match_mode: 'greaterThan'}]}`` - Filters where the dataset is a knowledgebase and has at least 2 dimensions.
+
+These filter types an options are documented fully in :doc:`filters`.
+
+**JSON Response Structure:**
+
+.. code-block:: json
+
+   {
+     "last_page": "boolean",
+     "experiments": "Dataset[]"
+   }
+
+
+* ``last_page`` (boolean) - True when this response contains the last page of results for the query. When false, more records can be obtained by repeating the query with a higher `offset` value.
+* ``experiments`` (Dataset[]) - An array of dataset objects. (See the structure of this object in the `Dataset Fetch Endpoint`_ documentation.)
 
 Facilities Endpoint
 ~~~~~~~~~~~~~~~~~~~
