@@ -391,60 +391,64 @@ Spectrometers Endpoints
 
 **Response Fields:**
 
-* ``identifier`` - [Add description]
-* ``name`` - [Add description]
-* ``year_commissioned`` - [Add description]
-* ``status`` - [Add description]
-* ``is_public`` - [Add description]
-* ``rates_url`` - [Add description]
-* ``magnet_vendor`` - [Add description]
-* ``field_strength_mhz`` - [Add description]
-* ``bore_mm`` - [Add description]
-* ``is_pumped`` - [Add description]
-* ``console_vendor`` - [Add description]
-* ``model`` - [Add description]
-* ``serial_no`` - [Add description]
-* ``year_configured`` - [Add description]
-* ``channel_count`` - [Add description]
-* ``receiver_count`` - [Add description]
-* ``operating_system`` - [Add description]
-* ``version`` - [Add description]
-* ``sample_changer_id`` - [Add description]
-* ``facility_identifier`` - [Add description]
-* ``sample_changer_default_temperature_control`` - [Add description]
+* ``identifier`` (uuid) - A unique identifier for the spectrometer.
+* ``name`` (string) - The facility assigned name of the spectrometer.
+* ``year_commissioned`` (integer) - [Add description]
+* ``status`` (string) - The current status of the instrument. One of the following: ``"Decommissioned", "Operational", "Under Repair"``
+* ``is_public`` (boolean) - Whether the instrument is public. Will always be true for the public (unauthenticated) API.
+* ``rates_url`` (string) - A hyperlink to a page with information about usage rates.
+* ``magnet_vendor`` (string) - The vendor of the spectrometer magnet. One of the following: ``"Agilent/Varian", "Bruker", "JEOL", "Q One", "Tech MAG"``
+* ``field_strength_mhz`` (integer) - The field strength of the spectrometer in megahertz
+* ``bore_mm`` (integer) - [Add description]
+* ``is_pumped`` (boolean) - [Add description]
+* ``console_vendor`` (string) - The vendor of the spectrometer console. One of the following: ``"Agilent/Varian", "Bruker", "JEOL", "Q One", "Tech MAG"``
+* ``model`` (string) - The model of the spectrometer.
+* ``serial_no`` (string) - The serial number of the spectrometer.
+* ``year_configured`` (integer) - The year the spectrometer was configured.
+* ``channel_count`` (integer) - [Add description]
+* ``receiver_count`` (integer) - [Add description]
+* ``operating_system`` (string) - The operating system of the spectrometer console. One of the following: ``"Windows", "RedHat", "CentOS", "Ubuntu", "Alma"``
+* ``version`` (string) - The version of the operating system of the spectrometer console.
+* ``sample_changer_id`` (integer) - The identifier of the sample changer in use.
+* ``facility_identifier`` (string) - The identifier of the facility the spectrometer is located in.
+* ``sample_changer_default_temperature_control`` (string) - The temperature control of the sample changer. One of the following: ``"Cooled", "Heated", "Room Temperature"``
+* ``sample_changer`` (SampleChanger) - See below.
+* ``software`` (Software) - See below.
+* ``installed_probe`` (ProbeStub) - See below.
+* ``compatible_probes`` (ProbeStub[]) - See below
 
 **Sample Changer Object Fields:**
 
-* ``model`` - [Add description]
-* ``vendor`` - [Add description]
-* ``min_temp`` - [Add description]
-* ``max_temp`` - [Add description]
-* ``num_spinners`` - [Add description]
-* ``num_96_racks`` - [Add description]
+* ``model`` (string) - The model of the sample changer.
+* ``vendor`` (string) - The vendor of the sample changer.
+* ``min_temp`` (string) - The minimum temperature the sample changer can operate at.
+* ``max_temp`` (string) - The maximum temperature the sample changer can operate at.
+* ``num_spinners`` (string) - [Add description]
+* ``num_96_racks`` (string) - [Add description]
 
 **Software Object Fields:**
 
-* ``software`` - [Add description]
-* ``versions`` - [Add description]
+* ``software`` (string) - The software package installed on the spectrometer.
+* ``versions`` (SoftwareVersion[]) - The versions of the software package installed on the spectrometer.
 
 **Software Version Object Fields:**
 
-* ``version`` - [Add description]
-* ``installed_software`` - [Add description]
+* ``version`` (string) - The version number of the installed software
+* ``installed_software`` (string[]) - An array of features of the installed software version.
 
-**Installed Probe Object Fields:**
+**Probe Stub Object Fields:**
 
-* ``identifier`` - [Add description]
+* ``identifier`` (uuid) - The identifier of a probe. Can be used to look up the probe using the probes endpoint.
 
 **Install Schedule Object Fields:**
 
-* ``identifier`` - [Add description]
-* ``install_start`` - [Add description]
+* ``identifier`` (uuid) - The identifier of the probe that was or will be installed on the `install_start` date.
+* ``install_start`` (string) - A date with time and timezone that the probe was or will be installed.
 
 **Field Drift Object Fields:**
 
-* ``rate`` - [Add description]
-* ``recorded`` - [Add description]
+* ``rate`` (string) - [Add description]
+* ``recorded`` (string) - The date the rate was recorded.
 
 Probes Endpoints
 ~~~~~~~~~~~~~~~~
@@ -510,53 +514,53 @@ Probes Endpoints
 
 **Response Fields:**
 
-* ``identifier`` - [Add description]
-* ``status`` - [Add description]
-* ``status_detail`` - [Add description]
-* ``kind`` - [Add description]
-* ``vendor`` - [Add description]
-* ``model`` - [Add description]
-* ``serial_number`` - [Add description]
-* ``cooling`` - [Add description]
-* ``sample_diameter`` - [Add description]
-* ``max_spinning_rate`` - [Add description]
-* ``gradient`` - [Add description]
-* ``x_gradient_field_strength`` - [Add description]
-* ``y_gradient_field_strength`` - [Add description]
-* ``z_gradient_field_strength`` - [Add description]
-* ``h1_fieldstrength_mhz`` - [Add description]
-* ``min_temperature_c`` - [Add description]
-* ``max_temperature_c`` - [Add description]
-* ``facility_identifier`` - [Add description]
-* ``facility_short_name`` - [Add description]
-* ``facility_long_name`` - [Add description]
+* ``identifier`` (string) - [Add description]
+* ``status`` (string) - [Add description]
+* ``status_detail`` (string) - [Add description]
+* ``kind`` (string) - [Add description]
+* ``vendor`` (string) - [Add description]
+* ``model`` (string) - [Add description]
+* ``serial_number`` (string) - [Add description]
+* ``cooling`` (string) - [Add description]
+* ``sample_diameter`` (string) - [Add description]
+* ``max_spinning_rate`` (string) - [Add description]
+* ``gradient`` (string) - [Add description]
+* ``x_gradient_field_strength`` (string) - [Add description]
+* ``y_gradient_field_strength`` (string) - [Add description]
+* ``z_gradient_field_strength`` (string) - [Add description]
+* ``h1_fieldstrength_mhz`` (string) - [Add description]
+* ``min_temperature_c`` (string) - [Add description]
+* ``max_temperature_c`` (string) - [Add description]
+* ``facility_identifier`` (string) - [Add description]
+* ``facility_short_name`` (string) - [Add description]
+* ``facility_long_name`` (string) - [Add description]
 
 **Installed On Object Fields:**
 
-* ``spectrometer_identifier`` - [Add description]
-* ``install_start`` - [Add description]
+* ``spectrometer_identifier`` (string) - [Add description]
+* ``install_start`` (string) - [Add description]
 
 **Channel Object Fields:**
 
-* ``ch_number`` - [Add description]
-* ``amplifier_cooled`` - [Add description]
-* ``inner_coil`` - [Add description]
-* ``outer_coil`` - [Add description]
-* ``min_frequency_nucleus`` - [Add description]
-* ``max_frequency_nucleus`` - [Add description]
-* ``broadband`` - [Add description]
-* ``nuclei`` - [Add description]
+* ``ch_number`` (string) - [Add description]
+* ``amplifier_cooled`` (string) - [Add description]
+* ``inner_coil`` (string) - [Add description]
+* ``outer_coil`` (string) - [Add description]
+* ``min_frequency_nucleus`` (string) - [Add description]
+* ``max_frequency_nucleus`` (string) - [Add description]
+* ``broadband`` (string) - [Add description]
+* ``nuclei`` (string) - [Add description]
 
 **Nucleus Object Fields:**
 
-* ``nucleus`` - [Add description]
-* ``sensitivity_measurements`` - [Add description]
+* ``nucleus`` (string) - [Add description]
+* ``sensitivity_measurements`` (string) - [Add description]
 
 **Sensitivity Measurement Object Fields:**
 
-* ``is_user`` - [Add description]
-* ``sensitivity`` - [Add description]
-* ``measurement_date`` - [Add description]
-* ``name`` - [Add description]
-* ``composition`` - [Add description]
+* ``is_user`` (string) - [Add description]
+* ``sensitivity`` (string) - [Add description]
+* ``measurement_date`` (string) - [Add description]
+* ``name`` (string) - [Add description]
+* ``composition`` (string) - [Add description]
 

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Literal
 
 import usnan
 from .probes import Probe
@@ -178,26 +178,26 @@ class Spectrometer:
     _initialized: bool = False
     _client: 'usnan.USNANClient' = None
     year_commissioned: Optional[int] = None
-    status: Optional[str] = None
+    status: Optional[Literal["Decommissioned", "Operational", "Under Repair"]] = None
     is_public: Optional[bool] = None
     rates_url: Optional[str] = None
-    magnet_vendor: Optional[str] = None
+    magnet_vendor: Optional[Literal["Agilent/Varian", "Bruker", "JEOL", "Q One", "Tech MAG"]] = None
     field_strength_mhz: Optional[float] = None
     bore_mm: Optional[float] = None
     is_pumped: Optional[bool] = None
-    console_vendor: Optional[str] = None
+    console_vendor: Optional[Literal["Agilent/Varian", "Bruker", "JEOL", "Q One", "Tech MAG"]] = None
     model: Optional[str] = None
     serial_no: Optional[str] = None
     year_configured: Optional[int] = None
     channel_count: Optional[int] = None
     receiver_count: Optional[int] = None
-    operating_system: Optional[str] = None
+    operating_system: Optional[Literal["Windows", "RedHat", "CentOS", "Ubuntu", "Alma"]] = None
     version: Optional[str] = None
     sample_changer_id: Optional[int] = None
     facility: 'usnan.models.Facility' = None
     _facility_identifier: Optional[str] = None
     sample_changer: Optional[SampleChanger] = None
-    sample_changer_default_temperature_control: Optional[bool] = None
+    sample_changer_default_temperature_control: Optional[Literal["Cooled", "Heated", "Room Temperature"]] = None
     software: Optional[Software] = None
     installed_probe: Optional[Probe] = None
     compatible_probes: Optional[List[Probe]] = None
