@@ -1,6 +1,6 @@
 # USNAN SDK
 
-Python SDK for interacting with the USNAN API.
+Python SDK for interacting with the USNAN API. See the full documentation at [ReadTheDocs](https://pythonsdk.readthedocs.io/en/latest/index.html).
 
 ## Installation
 
