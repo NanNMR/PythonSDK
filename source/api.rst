@@ -89,43 +89,43 @@ Dataset Fetch Endpoint
 
 **Response Fields:**
 
-* ``id`` - [Add description]
-* ``classification`` - [Add description]
-* ``dataset_name`` - [Add description]
+* ``id`` - The unique ID of the dataset. Note that this ID refers to a specific *version* of a dataset. (Which may be the original version.)
+* ``identifier`` - The identifier of the dataset more broadly - allowing access to all versions of the dataset. This is used to generate the unique ARK records for a dataset.
+* ``classification`` - An optional classification value entered by the user. Chosen from the following: ``"Calibration experiment", "Failed-sample related", "Failed-instrument related", "Failed-setup related", "Successful experiment", "Test experiment"``
+* ``dataset_name`` - The name of the dataset, which can be edited by the user. If the user has edited the name, this will be a more human-readable name than the `experiment_name` which is set automatically and is immutable.
 * ``decoupling_sequence`` - [Add description]
-* ``experiment_end_time`` - [Add description]
-* ``experiment_name`` - [Add description]
-* ``experiment_start_time`` - [Add description]
-* ``facility_identifier`` - [Add description]
-* ``identifier`` - [Add description]
-* ``is_knowledgebase`` - [Add description]
+* ``experiment_end_time`` - The end date and time (with timezone) of the experiment.
+* ``experiment_name`` - The name of the experiment as ran on the spectrometer. May not be edited.
+* ``experiment_start_time`` - The start date and time (with timezone) of the experiment.
+* ``facility_identifier`` - The identifier of the facility the experiment was ran in.
+* ``is_knowledgebase`` - Whether or not the dataset has been marked as a knowledgebase.
 * ``is_locked`` - [Add description]
 * ``is_multi_receiver`` - [Add description]
 * ``is_non_uniform`` - [Add description]
 * ``mas_rate`` - [Add description]
 * ``mixing_sequence`` - [Add description]
 * ``mixing_time`` - [Add description]
-* ``notes`` - [Add description]
+* ``notes`` - Arbitrary text notes on the dataset entered by the user.
 * ``num_dimension`` - [Add description]
 * ``num_dimension_collected`` - [Add description]
-* ``number_in_set`` - [Add description]
-* ``pi_name`` - [Add description]
-* ``preferred`` - [Add description]
-* ``public_time`` - [Add description]
-* ``published_time`` - [Add description]
+* ``number_in_set`` - Often multiple experiments are ran with the same `experiment_name` but only one is the actual experiment, whereas the others are calibrations or tests. This indicates how many experiments were ran in a row with the same `experiment_name`. Usually, only one of these experiments will be marked as `preferred` - the non-preferred experiments are hidden by default.
+* ``preferred`` - Whether or not the dataset has been marked as preferred out of a set. See `number_in_set` above.
+* ``pi_name`` - The name of the principal investigator who has authority over the dataset.
+* ``public_time`` - The date and time (with timezone) the dataset will become or has become public. As the current endpoint only support unauthenticated access, this will always be in the past.
+* ``published_time`` - The date and time (with timezone) that the dataset was published. Publishing creates an immutable copy of the metadata and data of the dataset and causes an `ARK <https://arks.org/>`_ record to be issued. Published datasets are issued a version number to allow individual published versions to be referenced.
 * ``pulse_sequence`` - [Add description]
-* ``sample_id`` - [Add description]
+* ``sample_id`` - The ID of the sample linked to the dataset.
 * ``sample_sparsity`` - [Add description]
-* ``session_id`` - [Add description]
+* ``session_id`` - A unique session identifier. This can be used to locate other experiments ran before or after a given experiment on the same spectrometer by the same user.
 * ``solvent`` - [Add description]
-* ``source`` - [Add description]
-* ``spectrometer_identifier`` - [Add description]
+* ``source`` - Whether the dataset was captured directly by NDTS (`NDTS-auto`), whether it was manually uploaded later from the spectrometer by a facility manager (`NDTS-manual`), or whether it was uploaded via the web GUI by an arbitrary user (`NAN-arbitrary`)
+* ``spectrometer_identifier`` - The identifier of the spectromter the experiment was ran on. Can be used to look up the spectrometer information.
 * ``state`` - [Add description]
-* ``tags`` - [Add description]
-* ``temperature_k`` - [Add description]
+* ``tags`` - Arbitrary text tags associated with the experiment for user convenience.
+* ``temperature_k`` - The temperature the spectrometer recorded the experiment was ran at.
 * ``time_shared`` - [Add description]
-* ``title`` - [Add description]
-* ``version`` - [Add description]
+* ``title`` - The title of the experiment. Set by the user, this is a formal title for a dataset.
+* ``version`` - The version of the dataset. Null for original datasets, set to a non-zero increasing number for published datasets.
 * ``z0_drift_correction`` - [Add description]
 
 **Dimension Object Fields:**
@@ -139,8 +139,10 @@ Dataset Fetch Endpoint
 
 **Version Object Fields:**
 
-* ``id`` - [Add description]
-* ``version`` - [Add description]
+* ``id`` - The identifier of the dataset with the version specified.
+* ``version`` - The version of the dataset with the id above.
+
+The version object allows you to look up other versions of a given dataset.
 
 Dataset Search Endpoint
 ~~~~~~~~~~~~~~~~~~~~~~~

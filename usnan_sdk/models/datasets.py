@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Literal
 
 import usnan_sdk
 
@@ -69,7 +69,7 @@ class Dataset:
     id: int
     _initialized: bool = False
     _client: 'usnan_sdk.USNANClient' = None
-    classification: Optional[str] = None
+    classification: Optional[Literal["Calibration experiment", "Failed-sample related", "Failed-instrument related", "Failed-setup related", "Successful experiment", "Test experiment"]] = None
     dataset_name: Optional[str] = None
     decoupling_sequence: Optional[str] = None
     experiment_end_time: Optional[str] = None
@@ -97,14 +97,14 @@ class Dataset:
     sample_sparsity: Optional[float] = None
     session_id: Optional[int] = None
     solvent: Optional[str] = None
-    source: Optional[str] = None
+    source: Optional[Literal['NDTS-auto', 'NDTS-manual', 'NAN-arbitrary']] = None
     spectrometer_identifier: Optional[str] = None
     state: Optional[str] = None
     tags: Optional[List[str]] = None
     temperature_k: Optional[float] = None
     time_shared: Optional[bool] = None
     title: Optional[str] = None
-    version: Optional[str] = None
+    version: Optional[int] = None
     z0_drift_correction: Optional[bool] = None
 
     # Related objects
