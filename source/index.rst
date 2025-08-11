@@ -14,4 +14,4 @@ access to the data itself.
 
    quickstart
    api
-
+   dataclasses
