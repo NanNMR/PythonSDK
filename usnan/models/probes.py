@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Optional, List, Dict, Any, Union
+from typing import Optional, List, Dict, Any, Union, Literal
 
 import usnan
 import usnan.models
@@ -58,13 +58,13 @@ class Probe:
     identifier: str = None
     _initialized: bool = False
     _client: 'usnan.USNANClient' = None
-    status: Optional[str] = None
-    status_detail: Optional[str] = None
+    status: Optional[Literal["Decommissioned", "Operational", "Under Repair"]] = None
+    status_detail: Optional[Literal["Solid State", "Solution"]] = None
     kind: Optional[str] = None
     vendor: Optional[str] = None
     model: Optional[str] = None
     serial_number: Optional[str] = None
-    cooling: Optional[str] = None
+    cooling: Optional[Literal["Helium", "Nitrogen", "Room Temp"]] = None
     sample_diameter: Optional[float] = None
     max_spinning_rate: Optional[float] = None
     gradient: Optional[bool] = None

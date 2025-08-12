@@ -514,14 +514,14 @@ Probes Endpoints
 
 **Response Fields:**
 
-* ``identifier`` (string) - [Add description]
-* ``status`` (string) - [Add description]
-* ``status_detail`` (string) - [Add description]
-* ``kind`` (string) - [Add description]
-* ``vendor`` (string) - [Add description]
-* ``model`` (string) - [Add description]
-* ``serial_number`` (string) - [Add description]
-* ``cooling`` (string) - [Add description]
+* ``identifier`` (uuid) - The unique identifier for the probe.
+* ``status`` (string) - The operational status of the probe. One of the following values: ``"Decommissioned", "Operational", "Under Repair"``
+* ``status_detail`` (string) - Any additional details about the probe status, like when repairs are expected to be completed.
+* ``kind`` (string) - The type of probe. One of the following values: ``"Solid State", "Solution"``
+* ``vendor`` (string) - The probe vendor.
+* ``model`` (string) - The probe model.
+* ``serial_number`` (string) - The probe serial number.
+* ``cooling`` (string) - How the probe is cooled, if it is cooled. One of the following values: ``"Helium", "Nitrogen", "Room Temp"``
 * ``sample_diameter`` (string) - [Add description]
 * ``max_spinning_rate`` (string) - [Add description]
 * ``gradient`` (string) - [Add description]
@@ -529,38 +529,38 @@ Probes Endpoints
 * ``y_gradient_field_strength`` (string) - [Add description]
 * ``z_gradient_field_strength`` (string) - [Add description]
 * ``h1_fieldstrength_mhz`` (string) - [Add description]
-* ``min_temperature_c`` (string) - [Add description]
-* ``max_temperature_c`` (string) - [Add description]
-* ``facility_identifier`` (string) - [Add description]
-* ``facility_short_name`` (string) - [Add description]
-* ``facility_long_name`` (string) - [Add description]
+* ``min_temperature_c`` (string) - The minimum temperature the probe can operate at.
+* ``max_temperature_c`` (string) - The maximum temperature the probe can operate at.
+* ``facility_identifier`` (string) - The unique identifier of the facility the probe is located at.
+* ``installed_on`` (InstalledOn) - Described below
+* ``channels`` (Channel[]) - Described below
 
 **Installed On Object Fields:**
 
-* ``spectrometer_identifier`` (string) - [Add description]
-* ``install_start`` (string) - [Add description]
+* ``spectrometer_identifier`` (uuid) - The identifier of the spectrometer that the probe is installed on.
+* ``install_start`` (string) - The date, time, and timezone that the probe was installed on the spectrometer.
 
 **Channel Object Fields:**
 
-* ``ch_number`` (string) - [Add description]
-* ``amplifier_cooled`` (string) - [Add description]
-* ``inner_coil`` (string) - [Add description]
-* ``outer_coil`` (string) - [Add description]
+* ``ch_number`` (integer) - [Add description]
+* ``amplifier_cooled`` (boolean) - [Add description]
+* ``inner_coil`` (boolean) - [Add description]
+* ``outer_coil`` (boolean) - [Add description]
 * ``min_frequency_nucleus`` (string) - [Add description]
 * ``max_frequency_nucleus`` (string) - [Add description]
-* ``broadband`` (string) - [Add description]
-* ``nuclei`` (string) - [Add description]
+* ``broadband`` (boolean) - [Add description]
+* ``nuclei`` (Nucleus[]) - See below.
 
 **Nucleus Object Fields:**
 
 * ``nucleus`` (string) - [Add description]
-* ``sensitivity_measurements`` (string) - [Add description]
+* ``sensitivity_measurements`` (SensitivityMeasurement[]) - See below
 
 **Sensitivity Measurement Object Fields:**
 
 * ``is_user`` (string) - [Add description]
 * ``sensitivity`` (string) - [Add description]
-* ``measurement_date`` (string) - [Add description]
+* ``measurement_date`` (string) - The date, time, and timezone that the sensitivity measurement was taken.
 * ``name`` (string) - [Add description]
 * ``composition`` (string) - [Add description]
 
