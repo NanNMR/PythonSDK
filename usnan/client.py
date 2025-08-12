@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class USNANClient:
     """Main client for interacting with the USNAN API"""
 
-    def __init__(self, base_url: str="https://api.nmrhub.org", timeout: int = 30, num_retries: int = 3):
+    def __init__(self, base_url: str="https://dev.api.nmrhub.org", timeout: int = 30, num_retries: int = 3):
         """
         Initialize the USNAN client
         
