@@ -225,8 +225,8 @@ class Dataset:
         
         return " ".join(parts) if parts else f"Dataset {self.id}"
 
-    def save_data(self, output_folder: Union[str,Path]):
+    def save_data(self, location: Union[str,Path]):
         """ Downloads all dataset files (including supplemental data) and saves them to the specified folder.
         The specified folder should either not yet exist or be empty."""
 
-        r = self._client.datasets.download([self.id], output_folder)
+        r = self._client.datasets.download([self.id], location)
