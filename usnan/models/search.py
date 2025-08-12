@@ -109,9 +109,47 @@ class SearchConfig:
         
         filter_meta = FilterMetadata(value=value, match_mode=match_mode, operator=operator)
         existing_field_filters = self.filters[field]
-        for field in existing_field_filters:
-            if field.operator != operator:
-                raise ValueError(f'Cannot have homogeneous operators for the same field. Field: "{field}. Previous operator: "{field.operator}". Current field operator: "{operator}"')
+        for existing_filter in existing_field_filters:
+            # Can't have two different operators on the same field
+            if existing_filter.operator != operator:
+                raise ValueError(f'Cannot have homogeneous operators for the same field. Field: "{field}. Previous operator: "{existing_filter.operator}". Current field operator: "{operator}"')
+
+            # Check for conflicting filter values
+            if operator == 'AND':
+                if existing_filter.match_mode == 'equals' and match_mode == 'equals' and existing_filter.value != value:
+                    raise ValueError(f'Adding two "equals" filters with different values will never return any results. Field: "{field}". Values: "{existing_filter.value}", "{value}"')
+
+                # Check for conflicting null/not null filters
+                if (existing_filter.match_mode == 'isNull' and match_mode == 'isNotNull') or \
+                        (existing_filter.match_mode == 'isNotNull' and match_mode == 'isNull'):
+                    raise ValueError(f'Conflicting "isNull" and "isNotNull" filters for the same field will never return results. Field: "{field}"')
+
+                # Check for conflicting equals and notEquals with same value
+                if (existing_filter.match_mode == 'equals' and match_mode == 'notEquals' and existing_filter.value == value) or \
+                        (existing_filter.match_mode == 'notEquals' and match_mode == 'equals' and existing_filter.value == value):
+                    raise ValueError(f'Conflicting "equals" and "notEquals" filters for the same field with the same value will never return results. Field: "{field}". Value: "{value}"')
+
+                # Check for conflicting greaterThan and lessThan filters
+                if existing_filter.match_mode == 'greaterThan' and match_mode == 'lessThan' and \
+                        isinstance(existing_filter.value, (float, int)) and isinstance(existing_filter.value, (float, int)) and \
+                        value <= existing_filter.value:
+                    raise ValueError(f'Conflicting "greaterThan" and "lessThan" filters will never return results. Field: "{field}". GreaterThan: "{existing_filter.value}", LessThan: "{value}"')
+                if existing_filter.match_mode == 'lessThan' and match_mode == 'greaterThan' and \
+                        isinstance(existing_filter.value, (float, int)) and isinstance(existing_filter.value, (float, int)):
+                    if value >= existing_filter.value:
+                        raise ValueError(f'Conflicting "greaterThan" and "lessThan" filters will never return results. Field: "{field}". GreaterThan: "{value}", LessThan: "{existing_filter.value}"')
+
+                # Check for conflicting contains and notContains with same value
+                if existing_filter.match_mode == 'contains' and match_mode == 'notContains' and existing_filter.value == value:
+                    raise ValueError(f'Conflicting "contains" and "notContains" filters with the same value will never return results. Field: "{field}". Value: "{value}"')
+                if existing_filter.match_mode == 'notContains' and match_mode == 'contains' and existing_filter.value == value:
+                    raise ValueError(f'Conflicting "contains" and "notContains" filters with the same value will never return results. Field: "{field}". Value: "{value}"')
+
+                # Check for conflicting includes and notIncludes with same value
+                if existing_filter.match_mode == 'includes' and match_mode == 'notIncludes' and existing_filter.value == value:
+                    raise ValueError(f'Conflicting "includes" and "notIncludes" filters with the same value will never return results. Field: "{field}". Value: "{value}"')
+                if existing_filter.match_mode == 'notIncludes' and match_mode == 'includes' and existing_filter.value == value:
+                    raise ValueError(f'Conflicting "includes" and "notIncludes" filters with the same value will never return results. Field: "{field}". Value: "{value}"')
         existing_field_filters.append(filter_meta)
         return self
 
