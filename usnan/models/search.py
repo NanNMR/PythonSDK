@@ -43,6 +43,45 @@ class SearchConfig:
         self.sort_order = sort_order
         self.sort_field = sort_field
 
+    def __str__(self) -> str:
+        """Return a string summary of the search configuration"""
+        parts = []
+        
+        # Add filter summary
+        if self.filters:
+            filter_parts = []
+            for field, filter_list in self.filters.items():
+                field_conditions = []
+                for filter_meta in filter_list:
+                    if filter_meta.match_mode in ('isNull', 'isNotNull'):
+                        condition = f"{field} {filter_meta.match_mode}"
+                    else:
+                        condition = f"{field} {filter_meta.match_mode} '{filter_meta.value}'"
+                    field_conditions.append(condition)
+                
+                # Join conditions for this field with the operator
+                if len(field_conditions) > 1:
+                    operator = filter_list[0].operator  # All filters for a field have same operator
+                    field_summary = f"({f' {operator} '.join(field_conditions)})"
+                else:
+                    field_summary = field_conditions[0]
+                filter_parts.append(field_summary)
+            
+            parts.append(f"Filters: {' AND '.join(filter_parts)}")
+        else:
+            parts.append("Filters: None")
+        
+        # Add pagination info
+        parts.append(f"Records: {self.records}, Offset: {self.offset}")
+        
+        # Add sorting info
+        if self.sort_field:
+            parts.append(f"Sort: {self.sort_field} {self.sort_order}")
+        else:
+            parts.append("Sort: None")
+        
+        return f"SearchConfig({', '.join(parts)})"
+
     @overload
     def add_filter(self, field: str, *, match_mode: Literal['isNull', 'isNotNull'], operator: OperatorMode = 'AND') -> 'SearchConfig':
         ...
