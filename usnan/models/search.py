@@ -103,9 +103,9 @@ class SearchConfig:
         Returns:
             Self for method chaining
         """
-        # For isNull and isNotNull, value should be None
+        # For isNull and isNotNull, value needs to be set but doesn't matter
         if match_mode in ('isNull', 'isNotNull') and value is not None:
-            value = None
+            value = True
         
         filter_meta = FilterMetadata(value=value, match_mode=match_mode, operator=operator)
         existing_field_filters = self.filters[field]
