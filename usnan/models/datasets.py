@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import Optional, Dict, Any, List, Literal
+from pathlib import Path
+from typing import Optional, Dict, Any, List, Literal, Union
 
 import usnan
 
@@ -193,3 +194,39 @@ class Dataset:
     def __repr__(self) -> str:
         """Return a concise representation of the dataset"""
         return f"Dataset('{self.id}')"
+
+    def __str__(self) -> str:
+        """Return a detailed string representation of the dataset"""
+        parts = []
+        
+        # Dataset name
+        if self.dataset_name:
+            parts.append(self.dataset_name)
+        
+        # Title (if different from dataset_name)
+        if self.title and self.title != self.dataset_name:
+            parts.append(f"'{self.title}'")
+        
+        # Time range
+        if self.experiment_start_time and self.experiment_end_time:
+            parts.append(f"({self.experiment_start_time} - {self.experiment_end_time})")
+        elif self.experiment_start_time:
+            parts.append(f"(started: {self.experiment_start_time})")
+        elif self.experiment_end_time:
+            parts.append(f"(ended: {self.experiment_end_time})")
+        
+        # Version
+        if self.version is not None:
+            parts.append(f"v{self.version}")
+        
+        # Publication info
+        if self.published_time:
+            parts.append(f"published: {self.published_time}")
+        
+        return " ".join(parts) if parts else f"Dataset {self.id}"
+
+    def save_data(self, output_folder: Union[str,Path]):
+        """ Downloads all dataset files (including supplemental data) and saves them to the specified folder.
+        The specified folder should either not yet exist or be empty."""
+
+        r = self._client.datasets.download_datasets([self.id], output_folder)

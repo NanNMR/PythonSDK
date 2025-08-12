@@ -1,6 +1,9 @@
 """Datasets endpoint implementation"""
 import concurrent.futures
-from typing import Generator
+import tempfile
+import zipfile
+from pathlib import Path
+from typing import Generator, List, Union
 
 from .base import BaseEndpoint
 from ..models.datasets import Dataset
@@ -81,3 +84,34 @@ class DatasetsEndpoint(BaseEndpoint):
 
         experiment = self._get(f'/nan/public/datasets/{dataset_id}')
         return Dataset.from_dict(self.client, experiment)
+
+    def download_datasets(self, dataset_ids: List[int], location: Union[str, Path]):
+        """ Downloads the data for the specified dataset ids. """
+
+        # Convert location to Path object for easier handling
+        location_path = Path(location)
+
+        # Check if target directory exists and is empty
+        if location_path.exists():
+            if not location_path.is_dir():
+                raise ValueError(f"Target location '{location_path}' exists but is not a directory")
+            if any(location_path.iterdir()):
+                raise ValueError(f"Target directory '{location_path}' is not empty")
+        else:
+            # Create the target directory
+            location_path.mkdir(parents=True, exist_ok=True)
+
+        json = self._post('/nan/data-browser/experiment-download', json={'ids': dataset_ids})
+
+        # Get the file response directly from the client
+        response = self.client._make_request('GET', '/nan/data-browser/experiment-download',
+                                             params={'resume_id': json['data']['resume_id']})
+
+        # Create a temporary file to save the ZIP
+        with tempfile.NamedTemporaryFile(suffix='.zip', delete=False) as temp_file:
+            temp_zip_path = Path(temp_file.name)
+            temp_file.write(response.content)
+
+            # Extract the ZIP file to the target location
+            with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
+                zip_ref.extractall(location_path)

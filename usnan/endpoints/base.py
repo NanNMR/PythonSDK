@@ -20,14 +20,14 @@ class BaseEndpoint:
         response = self.client._make_request('GET', endpoint, params=params)
         return response.json()
     
-    def _post(self, endpoint: str, data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def _post(self, endpoint: str, json: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Make a POST request and return JSON response"""
-        response = self.client._make_request('POST', endpoint, json=data)
+        response = self.client._make_request('POST', endpoint, json=json)
         return response.json()
     
-    def _put(self, endpoint: str, data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def _put(self, endpoint: str, json: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Make a PUT request and return JSON response"""
-        response = self.client._make_request('PUT', endpoint, json=data)
+        response = self.client._make_request('PUT', endpoint, json=json)
         return response.json()
     
     def _delete(self, endpoint: str) -> Dict[str, Any]:
