@@ -532,8 +532,8 @@ Probes Endpoints
 * ``min_temperature_c`` (string) - The minimum temperature the probe can operate at.
 * ``max_temperature_c`` (string) - The maximum temperature the probe can operate at.
 * ``facility_identifier`` (string) - The unique identifier of the facility the probe is located at.
-* ``installed_on`` (InstalledOn) - Described below
-* ``channels`` (Channel[]) - Described below
+* ``installed_on`` (InstalledOn) - See below
+* ``channels`` (Channel[]) - See below
 
 **Installed On Object Fields:**
 
@@ -549,7 +549,7 @@ Probes Endpoints
 * ``min_frequency_nucleus`` (string) - [Add description]
 * ``max_frequency_nucleus`` (string) - [Add description]
 * ``broadband`` (boolean) - [Add description]
-* ``nuclei`` (Nucleus[]) - See below.
+* ``nuclei`` (Nucleus[]) - See below
 
 **Nucleus Object Fields:**
 
