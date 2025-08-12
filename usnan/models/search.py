@@ -1,7 +1,7 @@
 import dataclasses
 import json
 from collections import defaultdict
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, overload
 
 MatchMode = Literal['equals','notEquals', 'startsWith', 'endsWith', 'contains', 'similarTo', 'notContains', 'isNull', 'isNotNull', 'greaterThan', 'lessThan', 'includes', 'notIncludes']
 OperatorMode = Literal['OR', 'AND']
@@ -43,19 +43,31 @@ class SearchConfig:
         self.sort_order = sort_order
         self.sort_field = sort_field
 
-    def add_filter(self, field: str, value: Any, match_mode: MatchMode = 'equals', operator: OperatorMode = 'AND') -> 'SearchConfig':
+    @overload
+    def add_filter(self, field: str, *, match_mode: Literal['isNull', 'isNotNull'], operator: OperatorMode = 'AND') -> 'SearchConfig':
+        ...
+
+    @overload
+    def add_filter(self, field: str, *, value: Any, match_mode: MatchMode = 'equals', operator: OperatorMode = 'AND') -> 'SearchConfig':
+        ...
+
+    def add_filter(self, field: str, *, value: Any = None, match_mode: MatchMode = 'equals', operator: OperatorMode = 'AND') -> 'SearchConfig':
         """
         Add a single filter for a field
 
         Args:
             field: The field name to filter on
-            value: The value to filter by
+            value: The value to filter by (optional for 'isNull' and 'isNotNull' match modes)
             match_mode: The match mode (e.g., 'contains', 'equals', 'startsWith')
             operator: The operator (e.g., 'and', 'or')
 
         Returns:
             Self for method chaining
         """
+        # For isNull and isNotNull, value should be None
+        if match_mode in ('isNull', 'isNotNull') and value is not None:
+            value = None
+        
         filter_meta = FilterMetadata(value=value, match_mode=match_mode, operator=operator)
         existing_field_filters = self.filters[field]
         for field in existing_field_filters:
