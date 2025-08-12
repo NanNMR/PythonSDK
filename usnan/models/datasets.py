@@ -229,4 +229,4 @@ class Dataset:
         """ Downloads all dataset files (including supplemental data) and saves them to the specified folder.
         The specified folder should either not yet exist or be empty."""
 
-        r = self._client.datasets.download_datasets([self.id], output_folder)
+        r = self._client.datasets.download([self.id], output_folder)

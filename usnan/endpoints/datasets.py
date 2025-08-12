@@ -85,7 +85,7 @@ class DatasetsEndpoint(BaseEndpoint):
         experiment = self._get(f'/nan/public/datasets/{dataset_id}')
         return Dataset.from_dict(self.client, experiment)
 
-    def download_datasets(self, dataset_ids: List[int], location: Union[str, Path]):
+    def download(self, dataset_ids: List[int], location: Union[str, Path]):
         """ Downloads the data for the specified dataset ids. """
 
         # Convert location to Path object for easier handling
