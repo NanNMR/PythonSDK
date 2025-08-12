@@ -11,7 +11,7 @@ class TestDatasetRetrieval:
 
     def test_get_single_dataset(self):
         """Ensure we can get a single dataset by ID."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         d = client.datasets.get(363067)
         assert isinstance(d, usnan.models.Dataset)
         assert isinstance(d.facility, usnan.models.Facility)
@@ -20,20 +20,20 @@ class TestDatasetRetrieval:
 
     def test_get_dataset_with_string_id(self):
         """Test that string IDs are handled correctly."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         with pytest.raises(TypeError):
             client.datasets.get("363067")
 
     def test_get_nonexistent_dataset(self):
         """Test that requesting a non-existent dataset raises appropriate error.
         301 is known not to exist. """
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         with pytest.raises(KeyError):
             client.datasets.get(301)
 
     def test_dataset_lazy_loading(self):
         """Test that datasets can be created with minimal data and load on access."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         # Create a dataset with just an ID (not initialized)
         d = usnan.models.Dataset.from_identifier(client, 363067)
         assert d.id == 363067
@@ -49,7 +49,7 @@ class TestDatasetSearch:
 
     def test_basic_search(self):
         """Ensure that getting datasets via search works."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         search_config = usnan.models.SearchConfig().add_filter('is_knowledgebase', value=True, match_mode='equals')
         results = client.datasets.search(search_config)
 
@@ -64,7 +64,7 @@ class TestDatasetSearch:
 
     def test_search_pagination(self):
         """Test that search handles pagination correctly."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         search_config = usnan.models.SearchConfig(records=49).add_filter('is_knowledgebase', value=True, match_mode='equals')
         results = client.datasets.search(search_config)
 
@@ -82,7 +82,7 @@ class TestDatasetSearch:
 
     def test_search_with_multiple_filters(self):
         """Test search with multiple filters."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         search_config = (usnan.models.SearchConfig(records=1)
                          .add_filter('is_knowledgebase', value=True, match_mode='equals')
                          .add_filter('num_dimension', value=2, match_mode='equals'))
@@ -102,7 +102,7 @@ class TestDatasetSearch:
 
     def test_search_empty_results(self):
         """Test search that returns no results."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         # Use a filter that should return no results
         search_config = usnan.models.SearchConfig().add_filter('dataset_name', value='nonexistent_dataset_12345', match_mode='equals')
         results = client.datasets.search(search_config)
@@ -115,7 +115,7 @@ class TestDatasetSearch:
 
     def test_search_generator_behavior(self):
         """Test that search returns a proper generator."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         search_config = usnan.models.SearchConfig(records=1).add_filter('is_knowledgebase', value=True, match_mode='equals')
         results = client.datasets.search(search_config)
 
@@ -133,7 +133,7 @@ class TestDatasetModel:
 
     def test_dataset_attributes(self):
         """Test that dataset has expected attributes."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         d = client.datasets.get(363067)
         
         # Test that basic attributes exist
@@ -148,7 +148,7 @@ class TestDatasetModel:
 
     def test_dataset_dimensions(self):
         """Test dataset dimensions functionality."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         d = client.datasets.get(363067)
         
         if d.dimensions:
@@ -160,7 +160,7 @@ class TestDatasetModel:
 
     def test_dataset_versions(self):
         """Test dataset versions functionality."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         d = client.datasets.get(363067)
         
         if d.versions:
@@ -176,7 +176,7 @@ class TestErrorHandling:
 
     def test_invalid_search_filter(self):
         """Test that invalid filter names raise RuntimeError."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
 
         with pytest.raises(RuntimeError):
             search_config = usnan.models.SearchConfig().add_filter('is_knowlsedgebase', value=True, match_mode='equals')
@@ -190,7 +190,7 @@ class TestErrorHandling:
 
     def test_invalid_dataset_id_type(self):
         """Test handling of invalid dataset ID types."""
-        client = usnan.USNANClient()
+        client = usnan.USNANClient('https://dev.api.nmrhub.org')
         
         with pytest.raises(TypeError):
             client.datasets.get(None)

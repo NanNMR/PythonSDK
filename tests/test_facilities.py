@@ -8,7 +8,7 @@ import usnan
 def test_get_facilities():
     """Test that get_facilities returns expected values. """
 
-    client = usnan.USNANClient()
+    client = usnan.USNANClient('https://dev.api.nmrhub.org')
     facilities = client.facilities.list()
 
     # Assert we got a list with at least one facility

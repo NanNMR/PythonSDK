@@ -8,7 +8,7 @@ import usnan
 def test_get_spectrometers():
     """Test that get_spectrometers returns expected values. """
 
-    client = usnan.USNANClient()
+    client = usnan.USNANClient('https://dev.api.nmrhub.org')
     spectrometers = client.spectrometers.list()
 
     # Assert we got a list with at least one spectrometer
