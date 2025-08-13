@@ -178,10 +178,8 @@ class TestErrorHandling:
         """Test that invalid filter names raise RuntimeError."""
         client = usnan.USNANClient('https://dev.api.nmrhub.org')
 
-        with pytest.raises(RuntimeError):
-            search_config = usnan.models.SearchConfig().add_filter('is_knowlsedgebase', value=True, match_mode='equals')
-            results = client.datasets.search(search_config)
-            next(results)  # Error should occur when we try to execute the search
+        with pytest.raises(ValueError):
+            usnan.models.SearchConfig().add_filter('is_knowlsedgebase', value=True, match_mode='equals')
 
     def test_mismatched_filter_operators(self):
         """Test that mismatched filters cannot be applied."""

@@ -43,7 +43,7 @@ class SearchConfig:
                  sort_field: Optional[str] = None):
 
         # Validate that the field is a valid Dataset property
-        if sort_field not in _dataset_fields:
+        if sort_field not in _dataset_fields and sort_field is not None:
             raise ValueError(f'Invalid sort field "{sort_field}". Must be one of: {sorted(_dataset_fields)}')
 
         if sort_order not in ['ASC', 'DESC']:
