@@ -13,7 +13,14 @@ logger = logging.getLogger(__name__)
 
 
 class USNANClient:
-    """Main client for interacting with the USNAN API"""
+    """Main client for interacting with the USNAN API
+    
+    Attributes:
+        facilities: Access to facilities endpoint for querying facility information
+        spectrometers: Access to spectrometers endpoint for querying spectrometer data
+        datasets: Access to datasets endpoint for querying dataset information
+        probes: Access to probes endpoint for querying probe data
+    """
 
     def __init__(self, base_url: str="https://dev.api.nmrhub.org", timeout: int = 30, num_retries: int = 3):
         """
