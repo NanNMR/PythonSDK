@@ -6,10 +6,8 @@ tools for working with USNAN (United States Network for Advanced NMR) data. Spec
 it provides dataclasses that map to data in the NAN archive, and provides an API client to
 fetch them.
 
-This SDK enables developers to access USNAN data from within their applications with ease.
-
-The SDK offers classes that correspond to the core data types in NAN, and provides easy
-access to the data itself.
+It currently supports fetching public data records, but a planned future update will add support
+for authenticating to enable fetching and modifying data records according to the user's credentials.
 
 .. toctree::
    :maxdepth: 2
