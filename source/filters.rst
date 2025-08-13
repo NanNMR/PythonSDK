@@ -126,9 +126,9 @@ Numeric Comparison
 
 .. code-block:: python
 
-    # Find 2D datasets
+    # Find datasets with more than 2 dimensions
     search_config = usnan.models.SearchConfig()
-    search_config.add_filter('num_dimension', value=2, match_mode='equals')
+    search_config.add_filter('num_dimension', value=2, match_mode='greaterThan')
 
 Null Checking
 ~~~~~~~~~~~~~
@@ -316,4 +316,5 @@ Here are some commonly used fields for filtering:
 * ``num_dimension`` - Number of dimensions (1D, 2D, etc.)
 * ``description`` - Dataset description
 
-For a complete list of available fields, refer to the Dataset model documentation or inspect a dataset object's attributes.
+For a complete list of available fields, refer to the :class:`usnan.models.datasets.Dataset` documentation or inspect a dataset object's attributes. All properties of a dataset
+can be used for searching/ordering results.
