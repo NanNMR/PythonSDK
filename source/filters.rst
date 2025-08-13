@@ -216,9 +216,7 @@ Invalid Filter Names
     try:
         search_config = usnan.models.SearchConfig()
         search_config.add_filter('invalid_field_name', value=True, match_mode='equals')
-        results = client.datasets.search(search_config)
-        next(results)  # Error occurs when executing the search
-    except RuntimeError as e:
+    except ValueError as e:
         print(f"Invalid filter: {e}")
 
 Mixed Operators

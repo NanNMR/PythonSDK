@@ -3,6 +3,10 @@ import json
 from collections import defaultdict
 from typing import Any, Dict, List, Literal, Optional, overload
 
+from . import datasets
+
+_dataset_fields = {f.name for f in dataclasses.fields(datasets.Dataset) if not f.name.startswith('_')}
+
 MatchMode = Literal['equals','notEquals', 'startsWith', 'endsWith', 'contains', 'similarTo', 'notContains', 'isNull', 'isNotNull', 'greaterThan', 'lessThan', 'includes', 'notIncludes']
 OperatorMode = Literal['OR', 'AND']
 SortOrder = Literal['ASC', 'DESC']
@@ -37,6 +41,14 @@ class SearchConfig:
                  offset: int = 0,
                  sort_order: SortOrder = 'ASC',
                  sort_field: Optional[str] = None):
+
+        # Validate that the field is a valid Dataset property
+        if sort_field not in _dataset_fields:
+            raise ValueError(f'Invalid sort field "{sort_field}". Must be one of: {sorted(_dataset_fields)}')
+
+        if sort_order not in ['ASC', 'DESC']:
+            raise ValueError(f'Invalid sort order "{sort_order}". Must be "ASC" or "DESC".')
+
         self.filters: Dict[str, List[FilterMetadata]] = defaultdict(list)
         self.records = records
         self.offset = offset
@@ -106,7 +118,11 @@ class SearchConfig:
         # For isNull and isNotNull, value needs to be set but doesn't matter
         if match_mode in ('isNull', 'isNotNull') and value is not None:
             value = True
-        
+
+        # Validate that the field is a valid Dataset property
+        if field not in _dataset_fields:
+            raise ValueError(f'Invalid field "{field}". Must be one of: {sorted(_dataset_fields)}')
+
         filter_meta = FilterMetadata(value=value, match_mode=match_mode, operator=operator)
         existing_field_filters = self.filters[field]
         for existing_filter in existing_field_filters:
