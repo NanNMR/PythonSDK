@@ -39,7 +39,7 @@ doc = [
 
 [project.urls]
 Homepage = "https://usnan.nmrhub.org"
-Repository = "https://github.com/usnan/usnan-sdk"
+Repository = "https://github.com/NanNMR/PythonSDK"
 
 [tool.setuptools.packages.find]
 exclude = ["build*", "source*"]
