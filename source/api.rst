@@ -17,12 +17,8 @@ Furthermore, some of these data objects have other data objects embedded inside 
 has staff objects associated with it. These embedded objects are implemented as Python dataclasses in the SDK models
 and their JSON structure is documented in the respective endpoint sections below.
 
-
-Endpoints
----------
-
 Dataset Fetch Endpoint
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 * ``GET /nan/public/datasets/{dataset_id}`` - Retrieve a specific dataset by ID
 
@@ -145,7 +141,7 @@ Dataset Fetch Endpoint
 The version object allows you to look up other versions of a given dataset.
 
 Dataset Search Endpoint
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 * ``GET /nan/public/datasets/search`` - Search for datasets using various filters
 
@@ -178,7 +174,7 @@ These filter types an options are documented fully in :doc:`filters`.
 * ``experiments`` (Dataset[]) - An array of dataset objects. (See the structure of this object in the `Dataset Fetch Endpoint`_ documentation.)
 
 Facilities Endpoints
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 * ``GET /nan/public/facilities`` - List all facilities
 * ``GET /nan/public/facilities/{facility_id}`` - Retrieve a specific facility by ID
@@ -318,7 +314,7 @@ An address associated with the facility.
 * ``country`` (string) - The country of the address.
 
 Spectrometers Endpoints
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 
 * ``GET /nan/public/instruments`` - List all spectrometers/instruments
@@ -451,7 +447,7 @@ Spectrometers Endpoints
 * ``recorded`` (string) - The date the rate was recorded.
 
 Probes Endpoints
-~~~~~~~~~~~~~~~~
+----------------
 
 * ``GET /nan/public/probes`` - List all probes
 * ``GET /nan/public/probes/{probe_id}`` - Retrieve a specific probe by ID
