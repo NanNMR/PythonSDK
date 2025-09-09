@@ -102,8 +102,8 @@ Dataset Fetch Endpoint
 * ``mixing_sequence`` (string) - The name of the mixing sequence used in the experiment, if applicable.
 * ``mixing_time`` (float) - The lenght of time (seconds) of the applied mixing sequence, if applicable.
 * ``notes`` (string) - Arbitrary text notes on the dataset entered by the user.
-* ``num_dimension`` (integer) - [Add description]
-* ``num_dimension_collected`` (integer) - [Add description]
+* ``num_dimension`` (integer) - The total number of dimensions defined in the pulse program.
+* ``num_dimension_collected`` (integer) - The number of dimensions that were actually collected during acquisition.
 * ``number_in_set`` (integer) - Often multiple experiments are ran with the same `experiment_name` but only one is the actual experiment, whereas the others are calibrations or tests. This indicates how many experiments were ran in a row with the same `experiment_name`. Usually, only one of these experiments will be marked as `preferred` - the non-preferred experiments are hidden by default.
 * ``preferred`` (boolean) - Whether or not the dataset has been marked as preferred out of a set. See `number_in_set` above.
 * ``pi_name`` (string) - The name of the principal investigator who has authority over the dataset.
@@ -111,7 +111,7 @@ Dataset Fetch Endpoint
 * ``published_time`` (string) - The date and time (with timezone) that the dataset was published. Publishing creates an immutable copy of the metadata and data of the dataset and causes an `ARK <https://arks.org/>`_ record to be issued. Published datasets are issued a version number to allow individual published versions to be referenced.
 * ``pulse_sequence`` (string) - The name of the pulse program used to collect the experiment.
 * ``sample_id`` (integer) - The ID of the sample linked to the dataset.
-* ``sample_sparsity`` (float) - [Add description]
+* ``sample_sparsity`` (float) - Percentage of acquired points (0–100%). A value of 100% indicates a fully sampled dataset. A value of less then 100% indicates a non-uniformly sampled (NUS) experiment.
 * ``session_id`` (integer) - A unique session identifier. This can be used to locate other experiments ran before or after a given experiment on the same spectrometer by the same user.
 * ``solvent`` (string) - The deuterated solvent used when collecting the experiment.
 * ``source`` (string) - Whether the dataset was captured directly by NDTS (`NDTS-auto`), whether it was manually uploaded later from the spectrometer by a facility manager (`NDTS-manual`), or whether it was uploaded via the web GUI by an arbitrary user (`NAN-arbitrary`)
@@ -126,12 +126,12 @@ Dataset Fetch Endpoint
 
 **Dimension Object Fields:**
 
-* ``dimension`` (integer) - [Add description]
-* ``nucleus`` (string) - [Add description]
-* ``is_direct`` (boolean) - [Add description]
-* ``spectral_width_ppm`` (float) - [Add description]
-* ``maximum_evolution_time`` (float) - [Add description]
-* ``num_points`` (integer) - [Add description]
+* ``dimension`` (integer) - Identifies the dimension order.
+* ``nucleus`` (string) - The nucleus observed in this dimension (e.g., "1H", "13C").
+* ``is_direct`` (boolean) - Indicates whether this dimension is the direct detection dimension.
+* ``spectral_width_ppm`` (float) - The spectral width of this dimension in parts per million (ppm).
+* ``maximum_evolution_time`` (float) - The maximum evolution time for this dimension (in seconds).
+* ``num_points`` (integer) - The number of acquired points in this dimension.
 
 **Version Object Fields:**
 
