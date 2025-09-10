@@ -8,7 +8,7 @@ import usnan
 def test_get_probes():
     """Test that get_probes returns expected values. """
 
-    client = usnan.USNANClient('https://dev.api.nmrhub.org')
+    client = usnan.USNANClient()
     probes = client.probes.list()
 
     # Assert we got a list with at least one probe

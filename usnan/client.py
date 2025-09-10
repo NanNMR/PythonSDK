@@ -22,7 +22,7 @@ class USNANClient:
         probes: Access to probes endpoint for querying probe data
     """
 
-    def __init__(self, base_url: str="https://dev.api.nmrhub.org", timeout: int = 30, num_retries: int = 3):
+    def __init__(self, base_url: str="https://api.nmrhub.org", timeout: int = 30, num_retries: int = 3):
         """
         Initialize the USNAN client
         
