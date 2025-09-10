@@ -3,5 +3,17 @@
 from .client import USNANClient
 from . import models
 
-__version__ = "0.1.0"
+try:
+    from importlib.metadata import version
+except ImportError:
+    # Python < 3.8 fallback
+    from importlib_metadata import version
+
+try:
+    __version__ = version("usnan")
+except Exception:
+    # Fallback version when package metadata is not available
+    __version__ = "dev"
+
+del version
 __all__ = ["USNANClient", "models"]
