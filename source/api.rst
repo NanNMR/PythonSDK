@@ -119,7 +119,7 @@ Dataset Fetch Endpoint
 * ``state`` (string) - Identifies the experiment as solid state or solution state.
 * ``tags`` (string[]) - Arbitrary text tags associated with the experiment for user convenience.
 * ``temperature_k`` (float) - The temperature the spectrometer recorded the experiment was ran at.
-* ``time_shared`` (boolean) - [Add description]
+* ``time_shared`` (boolean) - A pulse sequence is designed to generate multiple independent spectra within a single experiment by alternating transfer pathways.
 * ``title`` (string) - The title of the experiment. Set by the user, this is a formal title for a dataset.
 * ``version`` (string) - The version of the dataset. Null for original datasets, set to a non-zero increasing number for published datasets.
 * ``z0_drift_correction`` (boolean) - States the user defined Z0 drift correction for an experiment collected in an unlocked state.
@@ -389,20 +389,20 @@ Spectrometers Endpoints
 
 * ``identifier`` (uuid) - A unique identifier for the spectrometer.
 * ``name`` (string) - The facility assigned name of the spectrometer.
-* ``year_commissioned`` (integer) - [Add description]
+* ``year_commissioned`` (integer) - The calendar year when the spectrometer was first put into operation.
 * ``status`` (string) - The current status of the instrument. One of the following: ``"Decommissioned", "Operational", "Under Repair"``
 * ``is_public`` (boolean) - Whether the instrument is public. Will always be true for the public (unauthenticated) API.
 * ``rates_url`` (string) - A hyperlink to a page with information about usage rates.
 * ``magnet_vendor`` (string) - The vendor of the spectrometer magnet. One of the following: ``"Agilent/Varian", "Bruker", "JEOL", "Q One", "Tech MAG"``
 * ``field_strength_mhz`` (integer) - The field strength of the spectrometer in megahertz
-* ``bore_mm`` (integer) - [Add description]
+* ``bore_mm`` (integer) - The inner diameter of the magnet bore, measured in millimeters. This defines the maximum probe and sample sizes the spectrometer can accommodate.
 * ``is_pumped`` (boolean) - [Add description]
 * ``console_vendor`` (string) - The vendor of the spectrometer console. One of the following: ``"Agilent/Varian", "Bruker", "JEOL", "Q One", "Tech MAG"``
 * ``model`` (string) - The model of the spectrometer.
 * ``serial_no`` (string) - The serial number of the spectrometer.
-* ``year_configured`` (integer) - The year the spectrometer was configured.
-* ``channel_count`` (integer) - [Add description]
-* ``receiver_count`` (integer) - [Add description]
+* ``year_configured`` (integer) - The most recent year the spectrometer was configured or upgraded.
+* ``channel_count`` (integer) - The number of independent transmitter channels available for excitation.
+* ``receiver_count`` (integer) - The number of independent receivers available for signal acquisition.
 * ``operating_system`` (string) - The operating system of the spectrometer console. One of the following: ``"Windows", "RedHat", "CentOS", "Ubuntu", "Alma"``
 * ``version`` (string) - The version of the operating system of the spectrometer console.
 * ``sample_changer_id`` (integer) - The identifier of the sample changer in use.
@@ -419,8 +419,8 @@ Spectrometers Endpoints
 * ``vendor`` (string) - The vendor of the sample changer.
 * ``min_temp`` (string) - The minimum temperature the sample changer can operate at.
 * ``max_temp`` (string) - The maximum temperature the sample changer can operate at.
-* ``num_spinners`` (string) - [Add description]
-* ``num_96_racks`` (string) - [Add description]
+* ``num_spinners`` (string) - Number of sockets available for spinners.
+* ``num_96_racks`` (string) - Number of sockets available for 96-tube racks.
 
 **Software Object Fields:**
 
@@ -443,7 +443,7 @@ Spectrometers Endpoints
 
 **Field Drift Object Fields:**
 
-* ``rate`` (string) - [Add description]
+* ``rate`` (string) - The measured rate of magnetic field drift in Hz per hour.
 * ``recorded`` (string) - The date the rate was recorded.
 
 Probes Endpoints
@@ -518,13 +518,13 @@ Probes Endpoints
 * ``model`` (string) - The probe model.
 * ``serial_number`` (string) - The probe serial number.
 * ``cooling`` (string) - How the probe is cooled, if it is cooled. One of the following values: ``"Helium", "Nitrogen", "Room Temp"``
-* ``sample_diameter`` (string) - [Add description]
-* ``max_spinning_rate`` (string) - [Add description]
+* ``sample_diameter`` (string) - The diameter of the sample that the probe can accommodate.
+* ``max_spinning_rate`` (string) - The maximum spinning rate (in kHz) supported by the probe rotor for MAS experiments.
 * ``gradient`` (string) - [Add description]
-* ``x_gradient_field_strength`` (string) - [Add description]
-* ``y_gradient_field_strength`` (string) - [Add description]
-* ``z_gradient_field_strength`` (string) - [Add description]
-* ``h1_fieldstrength_mhz`` (string) - [Add description]
+* ``x_gradient_field_strength`` (string) - The maximum gradient field strength along the X-axis in G/cm.
+* ``y_gradient_field_strength`` (string) - The maximum gradient field strength along the Y-axis in G/cm.
+* ``z_gradient_field_strength`` (string) - The maximum gradient field strength along the Z-axis in G/cm.
+* ``h1_fieldstrength_mhz`` (string) - The proton resonance frequency in MHz corresponding to the field strength the probe is designed for.
 * ``min_temperature_c`` (string) - The minimum temperature the probe can operate at.
 * ``max_temperature_c`` (string) - The maximum temperature the probe can operate at.
 * ``facility_identifier`` (string) - The unique identifier of the facility the probe is located at.
