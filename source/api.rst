@@ -373,7 +373,7 @@ Spectrometers Endpoints
      ],
      "install_schedule": [
        {
-         "identifier": "string",
+         "probe_identifier": "string",
          "install_start": "string"
        }
      ],

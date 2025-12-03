@@ -140,7 +140,7 @@ class InstallScheduleRecord:
     @classmethod
     def from_dict(cls, client: 'usnan.USNANclient', data: Dict[str, Any]) -> 'InstallScheduleRecord':
         return cls(
-            probe=Probe.from_identifier(client, data.get('identifier')),
+            probe=Probe.from_identifier(client, data.get('probe_identifier')),
             install_start=data.get('install_start')
         )
 
