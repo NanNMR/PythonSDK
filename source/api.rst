@@ -107,7 +107,7 @@ Dataset Fetch Endpoint
 * ``number_in_set`` (integer) - Often multiple experiments are ran with the same `experiment_name` but only one is the actual experiment, whereas the others are calibrations or tests. This indicates how many experiments were ran in a row with the same `experiment_name`. Usually, only one of these experiments will be marked as `preferred` - the non-preferred experiments are hidden by default.
 * ``preferred`` (boolean) - Whether or not the dataset has been marked as preferred out of a set. See `number_in_set` above.
 * ``pi_name`` (string) - The name of the principal investigator who has authority over the dataset.
-* ``public_time`` (string) - The date and time (with timezone) the dataset will become or has become public. As the current endpoint only support unauthenticated access, this will always be in the past.
+* ``public_time`` (string) - The date and time (with timezone) the dataset will become or has become public. For unauthenticated requests, this will always be in the past. Authenticated users may see datasets with future public times if they have permission to access them.
 * ``published_time`` (string) - The date and time (with timezone) that the dataset was published. Publishing creates an immutable copy of the metadata and data of the dataset and causes an `ARK <https://arks.org/>`_ record to be issued. Published datasets are issued a version number to allow individual published versions to be referenced.
 * ``pulse_sequence`` (string) - The name of the pulse program used to collect the experiment.
 * ``sample_id`` (integer) - The ID of the sample linked to the dataset.
@@ -373,7 +373,7 @@ Spectrometers Endpoints
      ],
      "install_schedule": [
        {
-         "identifier": "string",
+         "probe_identifier": "string",
          "install_start": "string"
        }
      ],

@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'USNAN SDK'
-copyright = '2025, Jon Wedell'
+copyright = 'UConn Health'
 author = 'Jon Wedell'
 
 # -- General configuration ---------------------------------------------------
