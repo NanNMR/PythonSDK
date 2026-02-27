@@ -88,6 +88,27 @@ It's easy to clear the cache:
     client.clear_cache()
 
 
+Authentication
+--------------
+
+The examples above work without authentication and return publicly available data. To access
+additional datasets (e.g., your own unreleased data), log in with your NMR Hub account:
+
+.. code-block:: python
+
+   client.login()
+
+This opens your browser to complete the login. Your session is saved locally, so future runs
+will be authenticated automatically without needing to call ``login()`` again.
+
+For headless environments, use the device flow instead:
+
+.. code-block:: python
+
+   client.login(method='device')
+
+See :doc:`authentication` for full details on all authentication methods.
+
 Next Steps
 ----------
 
