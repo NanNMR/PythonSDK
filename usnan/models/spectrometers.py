@@ -354,10 +354,10 @@ class Spectrometer:
                 Probe.from_identifier(client, p.get('identifier')) for p in data.get('compatible_probes', []) if p.get('identifier')
             ],
             install_schedule=[
-                InstallScheduleRecord.from_dict(client, i) for i in data.get('install_schedule', [])
+                InstallScheduleRecord.from_dict(client, i) for i in (data.get('install_schedule') or [])
             ],
             field_drifts=[
-                FieldDrift.from_dict(f) for f in data.get('field_drifts', [])
+                FieldDrift.from_dict(f) for f in (data.get('field_drifts') or [])
             ],
             _initialized=True,
             _client=client
