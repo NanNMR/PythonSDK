@@ -153,12 +153,52 @@ Parameters:
 * ``sort_field`` (string) - The name of the field to sort by. Must match one of the fields in the Experiment response.
 * ``sort_order`` ('ASC' or 'DESC') - Specifies whether to sort by the sort_field in ascending or descending order.
 
-Some examples of the filters parameter, prior to being stringified:
+**The filters parameter**
 
-* ``{id: [{value: 363067, matchMode: 'equals', operator: 'OR'}, {value: 363068, matchMode: 'equals', operator: 'OR'}]}`` - Filters where the dataset ID has the exact value 363067 OR 363068.
-* ``{is_knowledgebase: [{value: true, matchMode: 'equals'}], num_dimension: [{value: 2, match_mode: 'greaterThan'}]}`` - Filters where the dataset is a knowledgebase and has at least 2 dimensions.
+The ``SearchConfig`` class builds this parameter for you; you only need the details below if you are calling the endpoint directly.
 
-These filter types an options are documented fully in :doc:`filters`.
+``filters`` is a JSON object which maps each field name to a **list of rule objects**. Each rule object has these keys:
+
+* ``matchMode`` (string) - How to compare the field, such as ``equals`` or ``greaterThan``. The match modes are listed in :doc:`filters`.
+* ``value`` - The value to compare the field with. Not needed for the ``isNull`` and ``isNotNull`` match modes.
+* ``operator`` (``AND`` or ``OR``, optional, default ``AND``) - How to combine this rule with the other rules for the same field. All the rules for one field must use the same operator. Different fields are always combined with AND.
+
+The list must contain rule objects, not bare values: ``{"is_knowledgebase": [true]}`` and ``{"is_knowledgebase": [null]}`` are rejected with a 400 error.
+
+Some examples of the filters parameter, before it is JSON encoded:
+
+* Datasets whose ID is exactly 363067 OR 363068:
+
+  .. code-block:: json
+
+     {"id": [{"value": 363067, "matchMode": "equals", "operator": "OR"},
+             {"value": 363068, "matchMode": "equals", "operator": "OR"}]}
+
+* Knowledgebase datasets with 3 or more dimensions (``greaterThan`` is a strict comparison):
+
+  .. code-block:: json
+
+     {"is_knowledgebase": [{"value": true, "matchMode": "equals"}],
+      "num_dimension": [{"value": 2, "matchMode": "greaterThan"}]}
+
+* Datasets with notes:
+
+  .. code-block:: json
+
+     {"notes": [{"matchMode": "isNotNull"}]}
+
+For example, with the ``requests`` library:
+
+.. code-block:: python
+
+    import json
+    import requests
+
+    filters = {"is_knowledgebase": [{"value": True, "matchMode": "equals"}]}
+    response = requests.get('https://api.nmrhub.org/nan/public/datasets/search',
+                            params={'filters': json.dumps(filters), 'records': 25, 'offset': 0})
+    response.raise_for_status()
+    datasets = response.json()['experiments']
 
 **JSON Response Structure:**
 

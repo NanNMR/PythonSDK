@@ -135,9 +135,9 @@ Null Checking
 
 .. code-block:: python
 
-    # Find datasets with descriptions
+    # Find datasets with notes
     search_config = usnan.models.SearchConfig()
-    search_config.add_filter('description', match_mode='isNotNull')
+    search_config.add_filter('notes', match_mode='isNotNull')
 
 Multiple Filters
 ----------------
